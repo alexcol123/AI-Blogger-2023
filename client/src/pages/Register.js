@@ -31,10 +31,11 @@ const Register = () => {
     if (register) {
       try {
         const { data } = await axios.post('/api/register', values)
-        console.log(data)
+
         if (data.error) return toast.error(data.error)
         else {
           toast.success('Registration successful')
+          localStorage.setItem('auth', JSON.stringify(data))
           navigate('/')
         }
       } catch (error) {
@@ -48,6 +49,7 @@ const Register = () => {
         if (data.error) return toast.error(data.error)
         else {
           toast.success('Login successful')
+          localStorage.setItem('auth', JSON.stringify(data))
           navigate('/')
         }
       } catch (error) {

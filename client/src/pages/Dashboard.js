@@ -3,8 +3,17 @@ import { GiTwoCoins } from 'react-icons/gi'
 import { Link } from 'react-router-dom'
 import Logo from '../components/Logo'
 import ManFace from '../assets/images/manface.jpg'
+import { useAuth } from '../context/auth'
+import { BiLogOutCircle } from 'react-icons/bi'
 
 const Dashboard = () => {
+  // Context
+  const [auth, setAuth] = useAuth()
+
+  const { user } = auth
+
+  console.log(user)
+
   const posts = [
     'post number 1',
     'post number 2',
@@ -54,36 +63,36 @@ const Dashboard = () => {
         </div>
 
         {/* User Info  */}
-        <div className='bg-blue-800 flex items-center gap-2 border-t border-t-black/50 h-20 px-2  '>
+        <div className='bg-blue-900 flex items-center gap-2 border-t border-t-black/50 h-20 px-2  '>
           <img
             src={ManFace}
             alt='a woman'
-            className=' w-12 h-12 rounded-full'
+            className=' w-14 h-14 rounded-full  border border-white  '
           />
 
           <div className='flex-1'>
-            <div className='font-bold'>email@gmail.com</div>
-            <Link className='text-sm' href='/logout'>
-              Logout
-            </Link>
+            <div className='font-bold'>{user?.name}</div>
+            <div>{user?.email}</div>
           </div>
+
+          <button onClick={()=>  console.log('Log out') }  className='text-sm ' href='/logout'>
+           < BiLogOutCircle size={30} className='text-white bg-red-800 m-1 rounded-full hover:bg-red-500' />
+          <p className='text-sm' >logout</p>
+          </button>
         </div>
-
-
       </div>
 
       {/* Main */}
 
-      <div className='w-full h-full bg-blue-100 flex flex-col justify-center items-center' >
-      <h2>main content</h2>
-      <Link
+      <div className='w-full h-full bg-blue-100 flex flex-col justify-center items-center'>
+        <h2>main content</h2>
+        <Link
           to='/register'
           className=' btnNormal  px-6 flex justify-center items-center mt-2 bg-red-500 '
         >
           Login now
         </Link>
       </div>
-
     </div>
   )
 }
