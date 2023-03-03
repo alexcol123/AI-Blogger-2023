@@ -1,24 +1,12 @@
 import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
 import Man2 from '../assets/images/man2.jpg'
 
 const Landing = () => {
-  const [values, setValues] = useState({
-    firstName: '',
-    email: '',
-    password: '',
-  })
+  const navigate = useNavigate()
 
   const [register, setRegister] = useState(false)
-
-  console.log(register)
-
-  const handleChange = (e) => {
-    const name = e.target.name
-    const value = e.target.value
-
-    setValues({ ...values, [name]: value })
-  }
 
   return (
     <div className='h-screen  w-screen overflow-hidden  flex items-center  justify-center  relative'>
@@ -37,7 +25,10 @@ const Landing = () => {
               quickly create engaging content and reach more readers.
             </h2>
 
-            <button className='btnNormal px-8 bg-primary600 '>
+            <button
+              onClick={() => navigate('/')}
+              className='btnNormal px-8 bg-primary600 '
+            >
               Enter
             </button>
           </div>

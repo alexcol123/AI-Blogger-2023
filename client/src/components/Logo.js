@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 const Logo = () => {
-  const [logoName, setLogoName] = useState('AI-Blogger')
+  const [logoName, setLogoName] = useState('Blog-Creator')
 
   return (
     <div className='flex items-center'>

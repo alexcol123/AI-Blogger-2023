@@ -4,10 +4,10 @@ import jwt from 'jsonwebtoken'
 
 //  Register
 export const register = async (req, res) => {
-  let { name, email, password, address } = req.body
+  let { name, email, password } = req.body
 
   try {
-    // console.log(name, email, password, address)
+    // console.log(name, email, password)
     if (!name?.trim()) return res.json({ error: 'Name is required' })
     if (!email?.trim()) return res.json({ error: 'Email is required' })
     if (!password || password?.length < 6)
@@ -24,7 +24,7 @@ export const register = async (req, res) => {
     }
 
     // Save user to DB
-    const user = await User.create({ name, email, password, address })
+    const user = await User.create({ name, email, password })
 
     // Create JWT
     const token = await user.createJWT()
@@ -34,7 +34,7 @@ export const register = async (req, res) => {
       user: {
         name: user.name,
         email: user.email,
-        address: user.address,
+
         role: user.role,
       },
       token,
@@ -81,7 +81,7 @@ export const login = async (req, res) => {
       user: {
         name: user.name,
         email: user.email,
-        address: user.address,
+
         role: user.role,
       },
       token,
