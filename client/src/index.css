@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  body {
+    @apply font-primary text-base bg-gray-100
+  }
+}
+
+
+@layer components {
+  .btnNormal {
+    @apply w-fit shadow font-semibold text-lg px-1 py-1     text-center rounded hover:opacity-80;
+  }
+
+  .btnFull {
+    @apply w-full shadow font-semibold text-lg px-1 py-1  text-center rounded hover:opacity-80;
+  }
+  .basicForm {
+    @apply bg-white w-full py-12 px-10  border shadow-md;
+  }
+}
