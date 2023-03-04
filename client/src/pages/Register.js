@@ -4,6 +4,7 @@ import FormInput from '../components/formParts/FormInput'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/auth'
 
 const Register = () => {
   const [values, setValues] = useState({
@@ -11,6 +12,8 @@ const Register = () => {
     email: '',
     password: '',
   })
+
+  const [auth, setAuth] = useAuth()
 
   const navigate = useNavigate()
 
@@ -36,6 +39,7 @@ const Register = () => {
         else {
           toast.success('Registration successful')
           localStorage.setItem('auth', JSON.stringify(data))
+          setAuth(data)
           navigate('/')
         }
       } catch (error) {
@@ -49,6 +53,8 @@ const Register = () => {
         if (data.error) return toast.error(data.error)
         else {
           toast.success('Login successful')
+          console.log(data)
+          setAuth(data)
           localStorage.setItem('auth', JSON.stringify(data))
           navigate('/')
         }

@@ -1,18 +1,35 @@
-import React from 'react'
+import { useState } from 'react'
 import { GiTwoCoins } from 'react-icons/gi'
 import { Link } from 'react-router-dom'
 import Logo from '../components/Logo'
 import ManFace from '../assets/images/manface.jpg'
 import { useAuth } from '../context/auth'
 import { BiLogOutCircle } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
+import FormInput from '../components/formParts/FormInput'
 
 const Dashboard = () => {
+  const navigate = useNavigate()
   // Context
   const [auth, setAuth] = useAuth()
+  // State
+  const [topic, setTopic] = useState('')
+  const [keywords, setkeywords] = useState('')
 
   const { user } = auth
 
-  console.log(user)
+  const logout = () => {
+    console.log('logout')
+
+    setAuth({ ...auth, user: null, token: '' })
+    localStorage.removeItem('auth')
+    navigate('/landing')
+  }
+
+  const handleNewBlogRequest = (e) => {
+    e.preventDefault()
+    console.log(topic, keywords)
+  }
 
   const posts = [
     'post number 1',
@@ -57,8 +74,10 @@ const Dashboard = () => {
         {/* Posts  */}
         <div className='p-4  flex-1 overflow-auto bg-gradient-to-b from-gray-800 to-blue-800 flex flex-col'>
           <h2 className='text-center text-xl my-3'>Blog List</h2>
-          {posts.map((post) => (
-            <Link to={`/post/:1`}>{post}</Link>
+          {posts.map((post, i) => (
+            <Link key={i} to={`/post/:1`}>
+              {post}
+            </Link>
           ))}
         </div>
 
@@ -75,9 +94,17 @@ const Dashboard = () => {
             <div>{user?.email}</div>
           </div>
 
-          <button onClick={()=>  console.log('Log out') }  className='text-sm ' href='/logout'>
-           < BiLogOutCircle size={30} className='text-white bg-red-800 m-1 rounded-full hover:bg-red-500' />
-          <p className='text-sm' >logout</p>
+          <button
+            type='button'
+            onClick={logout}
+            className='text-sm '
+            href='/logout'
+          >
+            <BiLogOutCircle
+              size={30}
+              className='text-white bg-red-800 m-1 rounded-full hover:bg-red-500'
+            />
+            <p className='text-sm'>logout</p>
           </button>
         </div>
       </div>
@@ -85,13 +112,47 @@ const Dashboard = () => {
       {/* Main */}
 
       <div className='w-full h-full bg-blue-100 flex flex-col justify-center items-center'>
-        <h2>main content</h2>
-        <Link
-          to='/register'
-          className=' btnNormal  px-6 flex justify-center items-center mt-2 bg-red-500 '
-        >
-          Login now
-        </Link>
+        {/*  Req form for new blog */}
+        <div>
+          <div className='w-[400px]'>
+            <form
+              onSubmit={handleNewBlogRequest}
+              className='basicForm  border-t-4 border-t-primary  '
+            >
+      
+      <h3 className="text-center text-2xl ">New Blog Post</h3>
+              <div className='mt-6 grid gap-6'>
+                <FormInput
+                  labelText={'Topic'}
+                  labelHtmlFor={'topic'}
+                  inputId={'topic'}
+                  name={'topic'}
+                  inputType={'text'}
+                  inputPlaceHolder={'Blog Topic'}
+                  value={topic}
+                  handleChange={(e) => setTopic(e.target.value)}
+                />
+
+                <FormInput
+                  labelText={'keywords'}
+                  labelHtmlFor={'keywords'}
+                  inputId={'keywords'}
+                  name={'keywords'}
+                  inputType={'text'}
+                  inputPlaceHolder={'keywords'}
+                  value={keywords}
+                  handleChange={(e) => setkeywords(e.target.value)}
+                />
+              </div>
+
+              <div className='mb-6 mt-12'>
+                <button className='btnFull bg-primary text-white'>
+                  Create Blog
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   )
