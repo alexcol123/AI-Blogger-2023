@@ -29,6 +29,11 @@ export const create = async (req, res) => {
       return
     }
 
+    // // Lower token by 1    =======       =======      =======     >>>
+    userProfile.tokensAvailable = userProfile.tokensAvailable - 1
+
+    userProfile.save()
+
     // OPEN AI  SETUP    =======       =======      =======     >>>
 
     const config = new Configuration({
@@ -40,12 +45,12 @@ export const create = async (req, res) => {
       model: 'text-davinci-003',
       temperature: 0,
       max_tokens: 3600,
-      prompt: `Write a long and detailed SEO-friendly blog post about ${topic} that targets the following comma-deparated keywords ${keywords} . The content should be formated in SEO-friendly HTML. The response must include appropiate HTML title and meta description. The return format must be stringified JSON  in the following format: 
+      prompt: `Write a long and detailed SEO-friendly blog post about ${topic} that targets the following comma-deparated keywords ${keywords} . The content should be formated in SEO-friendly HTML. The response must include appropiate HTML title and meta description. The return format must be stringified JSON  in the following format:
       {
         "postContent": port content here
         "title": title goes here
         "metaDescription: meta description goes here
-  
+
       } `,
     })
 
@@ -63,11 +68,19 @@ export const create = async (req, res) => {
       createdBy: senderID,
     })
 
-   
-
-
-
     res.status(200).json({ post: blogPostCreated })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const tokensAvailable = async (req, res) => {
+  try {
+    let { _id: senderID } = req.user
+    const userTokens = await User.findById(senderID).select('tokensAvailable')
+    console.log(userTokens)
+
+    res.status(200).json( userTokens.tokensAvailable)
   } catch (error) {
     console.log(error)
   }

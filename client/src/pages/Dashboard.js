@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { GiTwoCoins } from 'react-icons/gi'
 import { Link } from 'react-router-dom'
@@ -20,6 +20,8 @@ const Dashboard = () => {
   const [keywords, setkeywords] = useState('')
 
   const [blogPost, setBlogPost] = useState({})
+
+  const [availableTokensLeft, setAvailableTokensLeft] = useState(null)
 
   console.log(blogPost)
 
@@ -46,6 +48,19 @@ const Dashboard = () => {
     } catch (error) {
       console.log(error)
       toast.error('You must login to do this')
+    }
+  }
+
+  useEffect(() => {
+    if (user) getTokenAvailability()
+  }, [blogPost, user])
+
+  const getTokenAvailability = async () => {
+    try {
+      const { data } = await axios.get('/api/tokens-available')
+      setAvailableTokensLeft(data)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -86,7 +101,7 @@ const Dashboard = () => {
           >
             <GiTwoCoins size={25} className='text-yellow-600' />
             <span className='pl-1'>
-              {user?.tokensAvailable || 0} tokens available
+              {availableTokensLeft || 0} tokens available
             </span>
           </Link>
         </div>
@@ -197,7 +212,7 @@ const Dashboard = () => {
             <div className='text-sm font-bold mt-6 p-2 bg-stone-200 rounded-sm'>
               Keywords
             </div>
-{/* 
+            {/* 
             <div className='flex flex-wrap pt-2 gap-1'>
               {blogPost?.keywords &&
                 blogPost?.keyword.split(',').map((keyword, i) => (
