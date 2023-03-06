@@ -1,16 +1,36 @@
-import React from 'react'
+import { useState } from 'react'
 import Logo from './Logo'
 import { Link } from 'react-router-dom'
 import { GiTwoCoins } from 'react-icons/gi'
 import FormTextarea from './formParts/FormTextarea'
+import { toast } from 'react-hot-toast'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
-const NewBlogReqForm = ({
-  handleNewBlogRequest,
-  topic,
-  setTopic,
-  keywords,
-  setkeywords,
-}) => {
+const NewBlogReqForm = ({}) => {
+  const [topic, setTopic] = useState('')
+  const [keywords, setkeywords] = useState('')
+
+  const navigate = useNavigate()
+
+  const handleNewBlogRequest = async (e) => {
+    e.preventDefault()
+    try {
+      if (!topic) return toast.error('Blog topic is required')
+      if (!keywords) return toast.error('Blog keywords are required')
+
+      const { data } = await axios.post('/api/create', { topic, keywords })
+      if (data.message) return toast.error(data.message)
+
+      // setBlogPost(data.post)
+      // console.log(data.post._id)
+      navigate(`singlePost/${data.post._id}`)
+    } catch (error) {
+      console.log(error)
+      toast.error('You must login to do this')
+    }
+  }
+
   return (
     <div>
       <div className='w-[400px]'>
@@ -46,7 +66,10 @@ const NewBlogReqForm = ({
           </div>
 
           <div className='mb-6 mt-12'>
-            <button className='btnFull bg-primary text-white'>
+            <button
+              onSubmit={handleNewBlogRequest}
+              className='btnFull bg-primary text-white'
+            >
               Create Blog
             </button>
           </div>
@@ -57,5 +80,3 @@ const NewBlogReqForm = ({
 }
 
 export default NewBlogReqForm
-
-

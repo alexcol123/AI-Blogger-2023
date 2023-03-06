@@ -38,23 +38,23 @@ const Dashboard = () => {
     navigate('/landing')
   }
 
-  const handleNewBlogRequest = async (e) => {
-    e.preventDefault()
-    try {
-      if (!topic) return toast.error('Blog topic is required')
-      if (!keywords) return toast.error('Blog keywords are required')
+  // const handleNewBlogRequest = async (e) => {
+  //   e.preventDefault()
+  //   try {
+  //     if (!topic) return toast.error('Blog topic is required')
+  //     if (!keywords) return toast.error('Blog keywords are required')
 
-      const { data } = await axios.post('/api/create', { topic, keywords })
-      if (data.message) return toast.error(data.message)
+  //     const { data } = await axios.post('/api/create', { topic, keywords })
+  //     if (data.message) return toast.error(data.message)
 
-      // setBlogPost(data.post)
-      // console.log(data.post._id)
-      navigate(`singlePost/${data.post._id}`)
-    } catch (error) {
-      console.log(error)
-      toast.error('You must login to do this')
-    }
-  }
+  //     // setBlogPost(data.post)
+  //     // console.log(data.post._id)
+  //     navigate(`singlePost/${data.post._id}`)
+  //   } catch (error) {
+  //     console.log(error)
+  //     toast.error('You must login to do this')
+  //   }
+  // }
 
   useEffect(() => {
     if (user) {
