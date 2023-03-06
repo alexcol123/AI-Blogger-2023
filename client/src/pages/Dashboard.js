@@ -19,11 +19,14 @@ const Dashboard = () => {
   const [topic, setTopic] = useState('')
   const [keywords, setkeywords] = useState('')
 
-  const [blogPost, setBlogPost] = useState({})
+  // const [blogPost, setBlogPost] = useState({})
+  const [blogNamesList, setBlogNamesList] = useState([])
+
+  console.log(blogNamesList)
 
   const [availableTokensLeft, setAvailableTokensLeft] = useState(null)
 
-  console.log(blogPost)
+  // console.log(blogPost)
 
   const { user } = auth
 
@@ -44,7 +47,11 @@ const Dashboard = () => {
       const { data } = await axios.post('/api/create', { topic, keywords })
       if (data.message) return toast.error(data.message)
 
-      setBlogPost(data.post)
+      // setBlogPost(data.post)
+      // console.log(data.post._id)
+      navigate(`singlePost/${data.post._id}`)
+
+      
     } catch (error) {
       console.log(error)
       toast.error('You must login to do this')
@@ -52,8 +59,11 @@ const Dashboard = () => {
   }
 
   useEffect(() => {
-    if (user) getTokenAvailability()
-  }, [blogPost, user])
+    if (user) {
+      getTokenAvailability()
+      getListOfMyBlogsByName()
+    }
+  }, [ user])
 
   const getTokenAvailability = async () => {
     try {
@@ -64,22 +74,31 @@ const Dashboard = () => {
     }
   }
 
-  const posts = [
-    'post number 1',
-    'post number 2',
-    'post number 3',
-    'post number 4',
-    'post number 5',
-    'post number 6',
-    'post number 7',
-    'post number 1',
-    'post number 2',
-    'post number 3',
-    'post number 4',
-    'post number 5',
-    'post number 6',
-    'post number 7',
-  ]
+  const getListOfMyBlogsByName = async () => {
+    try {
+      const { data } = await axios.get('/api/myBlogList')
+      setBlogNamesList(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // const posts = [
+  //   'post number 1',
+  //   'post number 2',
+  //   'post number 3',
+  //   'post number 4',
+  //   'post number 5',
+  //   'post number 6',
+  //   'post number 7',
+  //   'post number 1',
+  //   'post number 2',
+  //   'post number 3',
+  //   'post number 4',
+  //   'post number 5',
+  //   'post number 6',
+  //   'post number 7',
+  // ]
 
   return (
     <div className='grid grid-cols-[300px_1fr] h-screen max-h-screen'>
@@ -109,9 +128,13 @@ const Dashboard = () => {
         {/* Posts  */}
         <div className='p-4  flex-1 overflow-auto bg-gradient-to-b from-gray-800 to-blue-800 flex flex-col'>
           <h2 className='text-center text-xl my-3'>Blog List</h2>
-          {posts.map((post, i) => (
-            <Link key={i} to={`/post/:1`}>
-              {post}
+          {blogNamesList?.map((post) => (
+            <Link
+              key={post._id}
+              to={`/singlePost/${post._id}`}
+              className={'mb-3'}
+            >
+              {post.title.substring(0, 33)}...
             </Link>
           ))}
         </div>
@@ -190,48 +213,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/*  Blog response */}
-
-        {blogPost && (
-          <div className='max-w-screen-sm mx-auto bg-white p-6 rounded-md my-10'>
-            <div className='text-sm font-bold mt-6 p-2 bg-stone-200 rounded-sm'>
-              Blog Post
-            </div>
-
-            <div className='text-sm font-bold mt-6 p-2 bg-stone-200 rounded-sm'>
-              SEO title and meta description
-            </div>
-
-            <div className='p-4 my-2 border border-stone-200 rounded-md'>
-              <div className='text-blue-600 text-2xl font-bold'>
-                {blogPost?.title}
-              </div>
-              <div className='mt-2'>{blogPost?.metaDescription}</div>
-            </div>
-
-            <div className='text-sm font-bold mt-6 p-2 bg-stone-200 rounded-sm'>
-              Keywords
-            </div>
-            {/* 
-            <div className='flex flex-wrap pt-2 gap-1'>
-              {blogPost?.keywords &&
-                blogPost?.keyword.split(',').map((keyword, i) => (
-                  <div
-                    key={i}
-                    className='  px-4   rounded-full bg-slate-800 text-white '
-                  >
-                    # {keyword}
-                  </div>
-                ))}
-            </div> */}
-
-            {/* Blog post body */}
-            <div
-              className='mt-4'
-              dangerouslySetInnerHTML={{ __html: blogPost?.postContent || '' }}
-            />
-          </div>
-        )}
+   
       </div>
     </div>
   )
