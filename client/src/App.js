@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard'
 import Landing from './pages/Landing'
 import Register from './pages/Register'
 import SingleBlogPost from './pages/SingleBlogPost'
+import NewBlogReqForm from './components/NewBlogReqForm'
 
 function App() {
   return (
@@ -11,10 +12,12 @@ function App() {
       <Toaster position='top-center' />
 
       <Routes>
-        <Route path='/' element={<Dashboard />} />
+        <Route path='/dashboard' element={<Dashboard />}>
+          <Route path='newBlog' element={<NewBlogReqForm />} />
+          <Route path='singlePost/:id' element={<SingleBlogPost />} />
+        </Route>
         <Route path='/register' element={<Register />} />
         <Route path='/landing' element={<Landing />} />
-        <Route path='/singlePost/:id' element={<SingleBlogPost />} />
       </Routes>
     </BrowserRouter>
   )
