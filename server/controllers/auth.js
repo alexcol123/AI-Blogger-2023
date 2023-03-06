@@ -26,6 +26,8 @@ export const register = async (req, res) => {
     // Save user to DB
     const user = await User.create({ name, email, password })
 
+    console.log(user)
+
     // Create JWT
     const token = await user.createJWT()
 
@@ -34,7 +36,7 @@ export const register = async (req, res) => {
       user: {
         name: user.name,
         email: user.email,
-
+        tokensAvailable: user.tokensAvailable,
         role: user.role,
       },
       token,
@@ -81,7 +83,7 @@ export const login = async (req, res) => {
       user: {
         name: user.name,
         email: user.email,
-
+        tokensAvailable: user.tokensAvailable,
         role: user.role,
       },
       token,

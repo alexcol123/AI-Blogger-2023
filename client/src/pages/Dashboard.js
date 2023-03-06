@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import axios from 'axios'
 import { GiTwoCoins } from 'react-icons/gi'
 import { Link } from 'react-router-dom'
 import Logo from '../components/Logo'
@@ -7,6 +8,8 @@ import { useAuth } from '../context/auth'
 import { BiLogOutCircle } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 import FormInput from '../components/formParts/FormInput'
+import FormTextarea from '../components/formParts/FormTextarea'
+import toast from 'react-hot-toast'
 
 const Dashboard = () => {
   const navigate = useNavigate()
@@ -26,9 +29,17 @@ const Dashboard = () => {
     navigate('/landing')
   }
 
-  const handleNewBlogRequest = (e) => {
+  const handleNewBlogRequest = async (e) => {
     e.preventDefault()
-    console.log(topic, keywords)
+    try {
+      if (!topic) return toast.error('Blog topic is required')
+      if (!keywords) return toast.error('Blog keywords are required')
+
+      const { data } = await axios.post('/api/create', {topic, keywords})
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const posts = [
@@ -67,7 +78,9 @@ const Dashboard = () => {
             className=' flex justify-center items-center mt-2 '
           >
             <GiTwoCoins size={25} className='text-yellow-600' />
-            <span className='pl-1'>20 tokens available</span>
+            <span className='pl-1'>
+              {user?.tokensAvailable || 0} tokens available
+            </span>
           </Link>
         </div>
 
@@ -119,10 +132,9 @@ const Dashboard = () => {
               onSubmit={handleNewBlogRequest}
               className='basicForm  border-t-4 border-t-primary  '
             >
-      
-      <h3 className="text-center text-2xl ">New Blog Post</h3>
+              <h3 className='text-center text-2xl '>New Blog Post</h3>
               <div className='mt-6 grid gap-6'>
-                <FormInput
+                <FormTextarea
                   labelText={'Topic'}
                   labelHtmlFor={'topic'}
                   inputId={'topic'}
@@ -131,17 +143,19 @@ const Dashboard = () => {
                   inputPlaceHolder={'Blog Topic'}
                   value={topic}
                   handleChange={(e) => setTopic(e.target.value)}
+                  rows={10}
                 />
 
-                <FormInput
-                  labelText={'keywords'}
+                <FormTextarea
+                  labelText={'keywords (comma separated)'}
                   labelHtmlFor={'keywords'}
                   inputId={'keywords'}
                   name={'keywords'}
                   inputType={'text'}
-                  inputPlaceHolder={'keywords'}
+                  inputPlaceHolder={'Ex art, history, science '}
                   value={keywords}
                   handleChange={(e) => setkeywords(e.target.value)}
+                  rows={2}
                 />
               </div>
 

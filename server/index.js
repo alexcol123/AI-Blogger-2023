@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 import morgan from 'morgan'
 
 import authRoutes from './routes/auth.js'
+import blogRoutes from './routes/blog.js'
 
 dotenv.config()
 const app = express()
@@ -29,6 +30,7 @@ app.get('/users', (req, res) => {
 
 // Routes
 app.use('/api', authRoutes)
+app.use('/api', blogRoutes)
 
 const port = process.env.PORT || 8000
 

@@ -22,7 +22,10 @@ const UserSchema = new mongoose.Schema({
     required: true,
   },
 
-
+  tokensAvailable: {
+    type: Number,
+    default: 3,
+  },
 
   role: {
     type: Number,
