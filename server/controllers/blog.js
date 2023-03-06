@@ -6,6 +6,7 @@ export const create = async (req, res) => {
   let { topic, keywords } = req.body
 
   console.log(topic, keywords)
+  console.log(req.user)
 
   try {
     // Must check if  person is login and if person has tokens

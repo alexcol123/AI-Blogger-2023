@@ -35,10 +35,11 @@ const Dashboard = () => {
       if (!topic) return toast.error('Blog topic is required')
       if (!keywords) return toast.error('Blog keywords are required')
 
-      const { data } = await axios.post('/api/create', {topic, keywords})
+      const { data } = await axios.post('/api/create', { topic, keywords })
       console.log(data)
     } catch (error) {
       console.log(error)
+      toast.error('You must login to do this')
     }
   }
 
