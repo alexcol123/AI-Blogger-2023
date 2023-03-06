@@ -80,7 +80,36 @@ export const tokensAvailable = async (req, res) => {
     const userTokens = await User.findById(senderID).select('tokensAvailable')
     console.log(userTokens)
 
-    res.status(200).json( userTokens.tokensAvailable)
+    res.status(200).json(userTokens.tokensAvailable)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const allBlogsByUser = async (req, res) => {
+  try {
+    let { _id: senderID } = req.user
+    const singleUserBlogList = await Blog.find({ createdBy: senderID }).select(
+      'title _id'
+    )
+
+    res.status(200).json(singleUserBlogList)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const singleUserBlog = async (req, res) => {
+  try {
+    let { _id: senderID } = req.user
+    let { blogId } = req.params
+
+    const singleUserBlog = await Blog.findOne({
+      // createdBy: senderID,
+      _id: blogId,
+    })
+
+    res.status(200).json(singleUserBlog)
   } catch (error) {
     console.log(error)
   }
