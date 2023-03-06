@@ -114,3 +114,22 @@ export const singleUserBlog = async (req, res) => {
     console.log(error)
   }
 }
+
+export const buyFakeTokens = async (req, res) => {
+  try {
+    let { _id } = req.user
+
+    console.log(_id)
+
+    const user = await User.findById({
+      _id,
+    })
+
+    user.tokensAvailable = user.tokensAvailable + 20
+    user.save()
+
+    res.status(200).json({ message: 'success' })
+  } catch (error) {
+    console.log(error)
+  }
+}

@@ -24,8 +24,6 @@ const Dashboard = () => {
   // const [blogPost, setBlogPost] = useState({})
   const [blogNamesList, setBlogNamesList] = useState([])
 
-  console.log(blogNamesList)
-
   const [availableTokensLeft, setAvailableTokensLeft] = useState(null)
 
   // console.log(blogPost)
@@ -63,7 +61,7 @@ const Dashboard = () => {
       getTokenAvailability()
       getListOfMyBlogsByName()
     }
-  }, [user])
+  }, [user, navigate])
 
   const getTokenAvailability = async () => {
     try {
@@ -118,7 +116,7 @@ const Dashboard = () => {
           </Link>
 
           <Link
-            to='/buy-tokens'
+            to='/dashboard/buyTokens'
             className=' flex justify-center items-center mt-2 '
           >
             <GiTwoCoins size={25} className='text-yellow-600' />
@@ -173,9 +171,7 @@ const Dashboard = () => {
       {/* Main */}
 
       <div className='w-full h-full bg-blue-100 flex flex-col justify-center items-center'>
-     
-
-     {/* outlet ====   ====   =====     =====   >>>>> */}
+        {/* outlet ====   ====   =====     =====   >>>>> */}
         <Outlet />
       </div>
     </div>
