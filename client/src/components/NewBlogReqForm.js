@@ -33,7 +33,7 @@ const NewBlogReqForm = ({}) => {
 
   return (
     <div>
-      <div className='w-[400px]'>
+      <div className='w-[400px] '>
         <form
           onSubmit={handleNewBlogRequest}
           className='basicForm  border-t-4 border-t-primary  '

@@ -99,9 +99,9 @@ const Dashboard = () => {
   // ]
 
   return (
-    <div className='grid grid-cols-[300px_1fr] h-screen max-h-screen'>
+    <div className='grid grid-cols-[330px_1fr]    max-h-screen  '>
       {/* left sidebar */}
-      <div className='flex flex-col text-white overflow-hidden'>
+      <div className='flex flex-col text-white  max-h-screen  '>
         {/* Header  */}
         <div className='bg-gray-900 py-4 px-4 flex flex-col gap-3 items-center  '>
           <div className='flex  justify-center'>
@@ -109,7 +109,7 @@ const Dashboard = () => {
           </div>
 
           <Link
-            to={'/dashboard/newBlog'}
+            to={'/dashboard'}
             className='btnFull  bg-yellow-600 text-center px-5 mt-4'
           >
             New Post
@@ -128,14 +128,14 @@ const Dashboard = () => {
 
         {/* Posts  */}
         <div className='p-4  flex-1 overflow-auto bg-gradient-to-b from-gray-800 to-blue-800 flex flex-col'>
-          <h2 className='text-center text-xl my-3'>Blog List</h2>
+          <h3 className='text-center text-xl my-3 '>Blog List</h3>
           {blogNamesList?.map((post) => (
             <Link
               key={post._id}
               to={`singlePost/${post._id}`}
-              className={'mb-3'}
+              className={'mb-3 text-md'}
             >
-              {post.title.substring(0, 33)}...
+              {post.title.substring(0, 35)}...
             </Link>
           ))}
         </div>
@@ -170,8 +170,9 @@ const Dashboard = () => {
 
       {/* Main */}
 
-      <div className='w-full h-full bg-blue-100 flex flex-col justify-center items-center'>
+      <div className=' bg-blue-100 flex flex-col  items-center h-screen   max-h-screen overflow-scroll pt-6 '>
         {/* outlet ====   ====   =====     =====   >>>>> */}
+
         <Outlet />
       </div>
     </div>
