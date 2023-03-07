@@ -1,16 +1,13 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { useAuth } from '../context/auth' 
+import { useAuth } from '../context/auth'
 import { useParams } from 'react-router-dom'
-
 
 const SingleBlogPost = () => {
   const [blogPost, setBlogPost] = useState({})
   const [auth, setAuth] = useAuth()
   const { user } = auth
   const params = useParams()
-
-  console.log(params)
 
   useEffect(() => {
     if (user) {
@@ -22,7 +19,6 @@ const SingleBlogPost = () => {
     try {
       const { data } = await axios.get(`/api/mySingleBlog/${params.id}`)
       setBlogPost(data)
-      console.log(data)
     } catch (error) {
       console.log(error)
     }

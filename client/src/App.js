@@ -13,7 +13,7 @@ function App() {
       <Toaster position='top-center' />
 
       <Routes>
-        <Route path='/dashboard' element={<Dashboard />}>
+        <Route path='/' element={<Dashboard />}>
           <Route index element={<NewBlogReqForm />} />
           <Route path='buyTokens' element={<BuyTokens />} />
 

@@ -12,6 +12,7 @@ import FormTextarea from '../components/formParts/FormTextarea'
 import toast from 'react-hot-toast'
 import NewBlogReqForm from '../components/NewBlogReqForm'
 import { Outlet } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 const Dashboard = () => {
   const navigate = useNavigate()
@@ -20,6 +21,10 @@ const Dashboard = () => {
   // State
   const [topic, setTopic] = useState('')
   const [keywords, setkeywords] = useState('')
+
+  const params = useParams()
+  const currentPostId = params.id || 0
+  console.log(currentPostId)
 
   // const [blogPost, setBlogPost] = useState({})
   const [blogNamesList, setBlogNamesList] = useState([])
@@ -109,17 +114,17 @@ const Dashboard = () => {
           </div>
 
           <Link
-            to={'/dashboard'}
+            to={'/'}
             className='btnFull  bg-yellow-600 text-center px-5 mt-4'
           >
             New Post
           </Link>
 
           <Link
-            to='/dashboard/buyTokens'
-            className=' flex justify-center items-center mt-2 '
+            to='/buyTokens'
+            className=' flex justify-center items-center mt-2 bg-white/10 p-2 px-4 rounded  hover:bg-white/30 ease-in '
           >
-            <GiTwoCoins size={25} className='text-yellow-600' />
+            <GiTwoCoins size={25} className='text-yellow-600  ' />
             <span className='pl-1'>
               {availableTokensLeft || 0} tokens available
             </span>
@@ -129,15 +134,19 @@ const Dashboard = () => {
         {/* Posts  */}
         <div className='p-4  flex-1 overflow-auto bg-gradient-to-b from-gray-800 to-blue-800 flex flex-col'>
           <h3 className='text-center text-xl my-3 '>Blog List</h3>
-          {blogNamesList?.map((post) => (
-            <Link
-              key={post._id}
-              to={`singlePost/${post._id}`}
-              className={'mb-3 text-md'}
-            >
-              {post.title.substring(0, 35)}...
-            </Link>
-          ))}
+          {blogNamesList?.map((post) => {
+            return (
+              <Link
+                key={post._id}
+                to={`singlePost/${post._id}`}
+                className={`mb-2 text-md bg-white/10 p-1  px-2 rounded   ease-in      ${
+                  post._id === currentPostId && 'text-yellow-600 bg-black/40'
+                } `}
+              >
+                {post.title.substring(0, 32)}...
+              </Link>
+            )
+          })}
         </div>
 
         {/* User Info  */}
