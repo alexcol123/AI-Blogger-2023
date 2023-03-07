@@ -6,6 +6,7 @@ import Register from './pages/Register'
 import SingleBlogPost from './pages/SingleBlogPost'
 import NewBlogReqForm from './components/NewBlogReqForm'
 import BuyTokens from './components/BuyTokens'
+import NewDalleImageReqForm from './components/NewDalleImageReqForm'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path='/' element={<Dashboard />}>
           <Route index element={<NewBlogReqForm />} />
           <Route path='buyTokens' element={<BuyTokens />} />
+          <Route path='newAIImage' element={<NewDalleImageReqForm />} />
 
           <Route path='singlePost/:id' element={<SingleBlogPost />} />
         </Route>

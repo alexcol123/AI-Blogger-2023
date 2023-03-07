@@ -3,13 +3,8 @@ import Blog from '../models/blog.js'
 import jwt from 'jsonwebtoken'
 import { Configuration, OpenAIApi } from 'openai'
 
-//  Register
+//  Create  AI  Blog      ======      =======     =======    >>>>>>
 export const create = async (req, res) => {
-  // let { topic, keywords } = req.body
-  // let { senderId : _id} = req.user
-  // console.log(topic, keywords)
-  // console.log(req.user)
-
   try {
     let { topic, keywords } = req.body
     // view user id as alias senderID
@@ -54,6 +49,8 @@ export const create = async (req, res) => {
       } `,
     })
 
+    // Response   =======       =======      =======     >>>
+
     const resp = response.data.choices[0]?.text.split('\n').join('')
     const parsedResp = await JSON.parse(resp)
 
@@ -69,6 +66,52 @@ export const create = async (req, res) => {
     })
 
     res.status(200).json({ post: blogPostCreated })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+//  Create  AI  Image      ======      =======     =======    >>>>>>
+
+export const createAiImage = async (req, res) => {
+  try {
+    let { topic } = req.body
+    // view user id as alias senderID
+    let { _id: senderID } = req.user
+
+    if (!topic) {
+      res.status(422).json({ message: 'topic and keywords are required' })
+    }
+
+    // Must check if  person is a valid user and has tokens
+    const userProfile = await User.findById(senderID)
+
+    if (!userProfile?.tokensAvailable) {
+      res
+        .status(200)
+        .json({ message: 'No tokens available, buy more to continue' })
+      return
+    }
+    userProfile.tokensAvailable = userProfile.tokensAvailable - 1
+    userProfile.save()
+
+    const config = new Configuration({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+    const openai = new OpenAIApi(config)
+
+    const response = await openai.createImage({
+      prompt: topic,
+      n: 1,
+      size: '512x512',
+    })
+
+    let imageUrl = response.data.data[0].url
+
+
+
+    res.status(200).json({ url: imageUrl })
+
   } catch (error) {
     console.log(error)
   }

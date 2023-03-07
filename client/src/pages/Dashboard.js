@@ -24,14 +24,11 @@ const Dashboard = () => {
 
   const params = useParams()
   const currentPostId = params.id || 0
-  console.log(currentPostId)
 
   // const [blogPost, setBlogPost] = useState({})
   const [blogNamesList, setBlogNamesList] = useState([])
 
   const [availableTokensLeft, setAvailableTokensLeft] = useState(null)
-
-  // console.log(blogPost)
 
   const { user } = auth
 
@@ -117,7 +114,14 @@ const Dashboard = () => {
             to={'/'}
             className='btnFull  bg-yellow-600 text-center px-5 mt-4'
           >
-            New Post
+            New AI Post
+          </Link>
+
+          <Link
+            to={'/newAIImage'}
+            className='btnFull  bg-yellow-700 text-center px-5 mt-4'
+          >
+            New AI Image
           </Link>
 
           <Link
