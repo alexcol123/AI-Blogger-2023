@@ -9,9 +9,15 @@ import { Configuration, OpenAIApi } from 'openai'
 // FOR MP3 sound testing    =======       =======      =======     >>>
 const __dirname = path.resolve()
 // console.log(__dirname)
-const mp3Sound = path.join(__dirname, 'velociraptor.m4a')
-// const mp3Sound = path.join(__dirname, 'real.mp3')
+
+// Sample files for testing mp3 and images 
+const mp3Sound = path.join(__dirname, 'files/velociraptor.m4a')
+const image1 = path.join(__dirname, 'files/img1.jpg ')
+
 // console.log(mp3Sound)
+// console.log(__dirname)
+console.log(image1)
+
 
 //  Create  AI  Blog      ======      =======     =======    >>>>>>
 export const create = async (req, res) => {
@@ -169,7 +175,6 @@ export const whisperTranscription = async (req, res) => {
 //  WIsper   AI   Translation    ======      =======     =======    >>>>>>
 export const whisperTranslation = async (req, res) => {
   try {
-
     console.log('translation started')
     // let { topic } = req.body
     // // view user id as alias senderID
