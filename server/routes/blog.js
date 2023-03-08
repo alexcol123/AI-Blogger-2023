@@ -2,6 +2,8 @@ import express from 'express'
 import { requireSignin } from '../middlewares/auth.js'
 import {
   create,
+  whisperTranscription,
+  whisperTranslation,
   tokensAvailable,
   allBlogsByUser,
   singleUserBlog,
@@ -13,6 +15,8 @@ const router = express.Router()
 
 router.post('/create', requireSignin, create)
 router.post('/create-ai-image', requireSignin, createAiImage)
+router.post('/create-transcription', requireSignin, whisperTranscription)
+router.post('/create-translation', requireSignin, whisperTranslation)
 
 router.get('/tokens-available', requireSignin, tokensAvailable)
 router.get('/myBlogList', requireSignin, allBlogsByUser)
