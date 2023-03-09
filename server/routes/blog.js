@@ -8,13 +8,18 @@ import {
   allBlogsByUser,
   singleUserBlog,
   createAiImage,
-  buyFakeTokens,
+  createAiImageVariation,
+  buyFakeTokens,translateAndParaphraseNewsStory
 } from '../controllers/blog.js'
 
 const router = express.Router()
 
 router.post('/create', requireSignin, create)
+router.post('/translateAndParaphraseNewsStory', requireSignin, translateAndParaphraseNewsStory)
+
 router.post('/create-ai-image', requireSignin, createAiImage)
+router.post('/create-ai-image-variation', requireSignin, createAiImageVariation)
+
 router.post('/create-transcription', requireSignin, whisperTranscription)
 router.post('/create-translation', requireSignin, whisperTranslation)
 
