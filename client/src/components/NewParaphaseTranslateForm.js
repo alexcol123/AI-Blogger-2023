@@ -7,25 +7,24 @@ import { toast } from 'react-hot-toast'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-const NewDalleImageReqForm = () => {
+const NewParaphaseTranslateForm = () => {
   const [topic, setTopic] = useState('')
-
-  const [imageRespURL, setImageRespURL] = useState('')
-
-  console.log(imageRespURL)
-
   const navigate = useNavigate()
 
-  const handleSubmit = async (e) => {
+
+  console.log(navigate)
+  const handleNewBlogRequest = async (e) => {
     e.preventDefault()
     try {
-      if (!topic) return toast.error('Image topic is required')
+      if (!topic) return toast.error('Blog topic is required')
 
-      const { data } = await axios.post('/api/create-ai-image', { topic })
+      const { data } = await axios.post(
+        '/api/translateAndParaphraseNewsStory',
+        { topic }
+      )
+      if (data.message) return toast.error(data.message)
 
-      setImageRespURL(data.url)
-
-       navigate(`singlePost/${data.post._id}`)
+      navigate(`/singlePost/${data.post._id}`)
     } catch (error) {
       console.log(error)
       toast.error('You must login to do this')
@@ -36,20 +35,20 @@ const NewDalleImageReqForm = () => {
     <div>
       <div className='w-[400px] '>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={handleNewBlogRequest}
           className='basicForm  border-t-4 border-t-primary  '
         >
-          <h3 className='text-center text-2xl '>New AI Image</h3>
+          <h3 className='text-center text-2xl '>
+            Paraphrase + Translate News Story
+          </h3>
           <div className='mt-6 grid gap-6'>
             <FormTextarea
-              labelText={'AI Image Topic'}
+              labelText={'Story Topic'}
               labelHtmlFor={'topic'}
               inputId={'topic'}
               name={'topic'}
               inputType={'text'}
-              inputPlaceHolder={
-                'ex: monkey driving a red convertible car in Miami beach '
-              }
+              inputPlaceHolder={'Story goes  here '}
               value={topic}
               handleChange={(e) => setTopic(e.target.value)}
               rows={10}
@@ -58,22 +57,16 @@ const NewDalleImageReqForm = () => {
 
           <div className='mb-6 mt-12'>
             <button
-              onSubmit={handleSubmit}
+              onSubmit={handleNewBlogRequest}
               className='btnFull bg-primary text-white'
             >
-              Create Image
+              Write Story
             </button>
           </div>
         </form>
-
-        {imageRespURL && (
-          <div className='mt-5'>
-            <img className='bg-cover' src={imageRespURL} alt='' />
-          </div>
-        )}
       </div>
     </div>
   )
 }
 
-export default NewDalleImageReqForm
+export default NewParaphaseTranslateForm

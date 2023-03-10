@@ -13,7 +13,7 @@ const SingleBlogPost = () => {
     if (user) {
       getSingleBlogsPost()
     }
-  }, [params])
+  }, [params, user])
 
   const getSingleBlogsPost = async () => {
     try {

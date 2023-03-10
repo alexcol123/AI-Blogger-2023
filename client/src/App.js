@@ -7,6 +7,7 @@ import SingleBlogPost from './pages/SingleBlogPost'
 import NewBlogReqForm from './components/NewBlogReqForm'
 import BuyTokens from './components/BuyTokens'
 import NewDalleImageReqForm from './components/NewDalleImageReqForm'
+import NewParaphaseTranslateForm from './components/NewParaphaseTranslateForm'
 
 function App() {
   return (
@@ -16,6 +17,10 @@ function App() {
       <Routes>
         <Route path='/' element={<Dashboard />}>
           <Route index element={<NewBlogReqForm />} />
+          <Route
+            path='paraphraseTranslate'
+            element={<NewParaphaseTranslateForm />}
+          />
           <Route path='buyTokens' element={<BuyTokens />} />
           <Route path='newAIImage' element={<NewDalleImageReqForm />} />
 

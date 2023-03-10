@@ -59,7 +59,7 @@ export const create = async (req, res) => {
       max_tokens: 3600,
       prompt: `Write a long and detailed SEO-friendly blog post about ${topic} that targets the following comma-deparated keywords ${keywords} . The content should be formated in SEO-friendly HTML. The response must include appropiate HTML title and meta description. The return format must be stringified JSON  in the following format:
       {
-        "postContent": port content here
+        "postContent": post content here
         "title": title goes here
         "metaDescription: meta description goes here
 
@@ -89,10 +89,10 @@ export const create = async (req, res) => {
 }
 
 //  Create  AI  Parafrase and translate news            =======     =======    >>>>>>
-
 export const translateAndParaphraseNewsStory = async (req, res) => {
   try {
     let { topic } = req.body
+    console.log(topic)
     // view user id as alias senderID
     let { _id: senderID } = req.user
 
@@ -124,17 +124,18 @@ export const translateAndParaphraseNewsStory = async (req, res) => {
 
     const response = await openai.createCompletion({
       model: 'text-davinci-003',
-      temperature: 0.7,
+      temperature: 1,
       max_tokens: 3600,
-
-      prompt: `Write a long and detailed SEO-friendly news post about this topic ${topic} topic should be paraphrase with and different from the topic . The content should be formated in SEO-friendly HTML. The response must include appropiate HTML title and meta description.  and a conclusion The return format must be stringified JSON  in the following format:
+      prompt: `Write a long and detailed SEO-friendly blog post about this news story ${topic} end of the story. The content should be formated in SEO-friendly HTML. The response must include appropiate HTML title and meta description. The return format must be stringified JSON  in the following format:
       {
-        "postContent": port content here
+        "postContent": post content here
         "title": title goes here
-        "metaDescription": meta description goes here
-        "postConclusion": conclusion goes here
+        "metaDescription: meta description goes here
+
       } and should be in spanish`,
     })
+
+  
 
     // Response   =======       =======      =======     >>>
 
@@ -143,34 +144,15 @@ export const translateAndParaphraseNewsStory = async (req, res) => {
 
     console.log(parsedResp)
 
-    res.status(200).json(parsedResp)
+    const blogPostCreated = await Blog.create({
+      postContent: parsedResp?.postContent,
+      title: parsedResp?.title,
+      metaDescription: parsedResp?.metaDescription,
+      topic,
+      createdBy: senderID,
+    })
 
-    // const blogPostCreated = await Blog.create({
-    //   postContent: parsedResp?.postContent,
-    //   title: parsedResp?.title,
-    //   metaDescription: parsedResp?.metaDescription,
-    //   topic,
-    //   keywords,
-    //   createdBy: senderID,
-    // })
-
-    // res.status(200).json({ post: blogPostCreated })
-
-    // const resp = response.data.choices[0]?.text.split('\n').join('')
-    // const parsedResp = await JSON.parse(resp)
-
-    // console.log(parsedResp)
-
-    // const blogPostCreated = await Blog.create({
-    //   postContent: parsedResp?.postContent,
-    //   title: parsedResp?.title,
-    //   metaDescription: parsedResp?.metaDescription,
-    //   topic,
-    //   keywords,
-    //   createdBy: senderID,
-    // })
-
-    // res.status(200).json({ post: blogPostCreated })
+    res.status(200).json({ post: blogPostCreated })
   } catch (error) {
     console.log(error)
   }

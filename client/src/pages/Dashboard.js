@@ -118,8 +118,15 @@ const Dashboard = () => {
           </Link>
 
           <Link
+            to={'/paraphraseTranslate'}
+            className='btnFull  bg-yellow-700 text-center px-5 mt-3  '
+          >
+            Paraphrase + Translate
+          </Link>
+
+          <Link
             to={'/newAIImage'}
-            className='btnFull  bg-yellow-700 text-center px-5 mt-4'
+            className='btnFull  bg-yellow-600 text-center px-5 mt-3'
           >
             New AI Image
           </Link>
