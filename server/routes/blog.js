@@ -24,7 +24,7 @@ router.post('/create-transcription', requireSignin, whisperTranscription)
 router.post('/create-translation', requireSignin, whisperTranslation)
 
 router.get('/tokens-available', requireSignin, tokensAvailable)
-router.get('/myBlogList', requireSignin, allBlogsByUser)
+router.post('/myBlogList', requireSignin, allBlogsByUser)
 router.get('/mySingleBlog/:blogId', requireSignin, singleUserBlog)
 
 router.get('/buy-fake-tokens', requireSignin, buyFakeTokens)

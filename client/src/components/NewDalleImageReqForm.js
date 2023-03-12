@@ -12,8 +12,6 @@ const NewDalleImageReqForm = () => {
 
   const [imageRespURL, setImageRespURL] = useState('')
 
-  console.log(imageRespURL)
-
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -24,11 +22,9 @@ const NewDalleImageReqForm = () => {
       const { data } = await axios.post('/api/create-ai-image', { topic })
 
       setImageRespURL(data.url)
-
-       navigate(`singlePost/${data.post._id}`)
     } catch (error) {
       console.log(error)
-      toast.error('You must login to do this')
+      toast.error('You must login to do this image')
     }
   }
 

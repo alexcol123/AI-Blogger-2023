@@ -24,7 +24,7 @@ app.use(morgan('dev'))
 
 // Sample route
 app.get('/users', (req, res) => {
-  console.log('users')
+
   res.json({ data: 'Alexopolis Xersis Phersepolis ' })
 })
 

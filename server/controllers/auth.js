@@ -26,8 +26,7 @@ export const register = async (req, res) => {
     // Save user to DB
     const user = await User.create({ name, email, password })
 
-    console.log(user)
-
+   
     // Create JWT
     const token = await user.createJWT()
 
@@ -51,7 +50,7 @@ export const login = async (req, res) => {
   let { email, password } = req.body
 
   try {
-    console.log(email, password)
+
 
     if (!email?.trim()) return res.json({ error: 'Email is required' })
     if (!password || password?.length < 6)

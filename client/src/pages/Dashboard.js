@@ -21,12 +21,15 @@ const Dashboard = () => {
   // State
   const [topic, setTopic] = useState('')
   const [keywords, setkeywords] = useState('')
+  const [filter, setFilter] = useState('')
 
   const params = useParams()
   const currentPostId = params.id || 0
 
   // const [blogPost, setBlogPost] = useState({})
   const [blogNamesList, setBlogNamesList] = useState([])
+
+
 
   const [availableTokensLeft, setAvailableTokensLeft] = useState(null)
 
@@ -63,7 +66,7 @@ const Dashboard = () => {
       getTokenAvailability()
       getListOfMyBlogsByName()
     }
-  }, [user, navigate])
+  }, [user, navigate, filter])
 
   const getTokenAvailability = async () => {
     try {
@@ -76,8 +79,15 @@ const Dashboard = () => {
 
   const getListOfMyBlogsByName = async () => {
     try {
-      const { data } = await axios.get('/api/myBlogList')
-      setBlogNamesList(data)
+      if(!filter ){
+        const { data } = await axios.post('/api/myBlogList')
+        setBlogNamesList(data)
+      }else{
+        const { data } = await axios.post('/api/myBlogList', {filter})
+        setBlogNamesList(data)
+      }
+
+     
     } catch (error) {
       console.log(error)
     }
@@ -144,7 +154,29 @@ const Dashboard = () => {
 
         {/* Posts  */}
         <div className='p-4  flex-1 overflow-auto bg-gradient-to-b from-gray-800 to-blue-800 flex flex-col'>
-          <h3 className='text-center text-xl my-3 '>Blog List</h3>
+          <div className='flex justify-between mb-5'>
+            <h3 className='text-center text-lg my-1 '>VIEW: </h3>
+
+            <button
+              onClick={() => setFilter('')}
+              className='btnNormal px-2   bg-red-500/50'
+            >
+              ALL
+            </button>
+
+            <button
+              onClick={() => setFilter('blog')}
+              className='btnNormal px-2   bg-yellow-400/50'
+            >
+              Blogs
+            </button>
+            <button
+              onClick={() => setFilter('news')}
+              className='btnNormal  px-2  bg-green-500/50'
+            >
+              News
+            </button>
+          </div>
           {blogNamesList?.map((post) => {
             return (
               <Link

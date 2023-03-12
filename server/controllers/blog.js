@@ -71,8 +71,6 @@ export const create = async (req, res) => {
     const resp = response.data.choices[0]?.text.split('\n').join('')
     const parsedResp = await JSON.parse(resp)
 
-    console.log(parsedResp)
-
     const blogPostCreated = await Blog.create({
       postContent: parsedResp?.postContent,
       title: parsedResp?.title,
@@ -91,13 +89,20 @@ export const create = async (req, res) => {
 //  Create  AI  Parafrase and translate news            =======     =======    >>>>>>
 export const translateAndParaphraseNewsStory = async (req, res) => {
   try {
-    let { topic } = req.body
-    console.log(topic)
+    let { topic, respTopicType } = req.body
+    // console.log(topic , respTopicType)
     // view user id as alias senderID
     let { _id: senderID } = req.user
 
     if (!topic) {
       res.status(422).json({ message: 'topic  is required' })
+    }
+
+    if (!respTopicType) {
+      res.status(422).json({
+        message:
+          'respTopicType  is required example, blog, news, report,  essay',
+      })
     }
 
     // Must check if  person is a valid user and has tokens
@@ -135,19 +140,16 @@ export const translateAndParaphraseNewsStory = async (req, res) => {
       } and should be in spanish`,
     })
 
-  
-
     // Response   =======       =======      =======     >>>
 
     const resp = response.data.choices[0]?.text.split('\n').join('')
     const parsedResp = await JSON.parse(resp)
 
-    console.log(parsedResp)
-
     const blogPostCreated = await Blog.create({
       postContent: parsedResp?.postContent,
       title: parsedResp?.title,
       metaDescription: parsedResp?.metaDescription,
+      respTopicType,
       topic,
       createdBy: senderID,
     })
@@ -308,7 +310,6 @@ export const whisperTranscription = async (req, res) => {
 //  WIsper   AI   Translation    ======      =======     =======    >>>>>>
 export const whisperTranslation = async (req, res) => {
   try {
-    console.log('translation started')
     // let { topic } = req.body
     // // view user id as alias senderID
     let { _id: senderID } = req.user
@@ -352,7 +353,6 @@ export const tokensAvailable = async (req, res) => {
   try {
     let { _id: senderID } = req.user
     const userTokens = await User.findById(senderID).select('tokensAvailable')
-    console.log(userTokens)
 
     res.status(200).json(userTokens.tokensAvailable)
   } catch (error) {
@@ -364,9 +364,28 @@ export const tokensAvailable = async (req, res) => {
 export const allBlogsByUser = async (req, res) => {
   try {
     let { _id: senderID } = req.user
-    const singleUserBlogList = await Blog.find({ createdBy: senderID }).select(
-      'title _id'
-    )
+
+    let myFilter = {}
+    myFilter.createdBy = req.user._id
+
+
+    if (req.body.filter && req.body.filter !== '')
+      myFilter.respTopicType = req.body.filter
+    console.log(myFilter)
+
+    console.log(req.body)
+
+    // !req.body || req.body.length === 0
+    //   ? (myFilter = {})
+    //   : (myFilter = req.body.filter)
+
+    const singleUserBlogList = await Blog.find(
+      myFilter,
+      // createdBy: senderID,
+      // // respTopicType: myFilter,
+    ).select('title _id')
+
+    console.log(singleUserBlogList)
 
     res.status(200).json(singleUserBlogList)
   } catch (error) {

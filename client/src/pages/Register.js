@@ -49,11 +49,11 @@ const Register = () => {
     } else {
       try {
         const { data } = await axios.post('/api/login', values)
-        console.log(data)
+
         if (data.error) return toast.error(data.error)
         else {
           toast.success('Login successful')
-          console.log(data)
+     
           setAuth(data)
           localStorage.setItem('auth', JSON.stringify(data))
           navigate('/')

@@ -8,6 +8,7 @@ import NewBlogReqForm from './components/NewBlogReqForm'
 import BuyTokens from './components/BuyTokens'
 import NewDalleImageReqForm from './components/NewDalleImageReqForm'
 import NewParaphaseTranslateForm from './components/NewParaphaseTranslateForm'
+import PageNotFound from './pages/PageNotFound'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
 
           <Route path='singlePost/:id' element={<SingleBlogPost />} />
         </Route>
+        <Route path='*' element={<PageNotFound />} />
         <Route path='/register' element={<Register />} />
         <Route path='/landing' element={<Landing />} />
       </Routes>

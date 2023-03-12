@@ -26,7 +26,7 @@ const Landing = () => {
             </h2>
 
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/register')}
               className='btnNormal px-8 bg-primary600 '
             >
               Enter

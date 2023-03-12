@@ -9,18 +9,20 @@ import { useNavigate } from 'react-router-dom'
 
 const NewParaphaseTranslateForm = () => {
   const [topic, setTopic] = useState('')
-  const navigate = useNavigate()
+  const [respTopicType, setRespTopicType] = useState('')
 
+  const navigate = useNavigate()
 
   console.log(navigate)
   const handleNewBlogRequest = async (e) => {
     e.preventDefault()
     try {
+       if (!respTopicType) return toast.error('Topic is required ex: blog, news')
       if (!topic) return toast.error('Blog topic is required')
 
       const { data } = await axios.post(
         '/api/translateAndParaphraseNewsStory',
-        { topic }
+        { topic , respTopicType}
       )
       if (data.message) return toast.error(data.message)
 
@@ -42,17 +44,32 @@ const NewParaphaseTranslateForm = () => {
             Paraphrase + Translate News Story
           </h3>
           <div className='mt-6 grid gap-6'>
+
+          <FormTextarea
+              labelText={'Type Of Response (ex Blog or News)'}
+              labelHtmlFor={'respTopicType'}
+              inputId={'respTopicType'}
+              name={'respTopicType'}
+              inputType={'text'}
+              inputPlaceHolder={'Ex  (ex Blog or  News,) '}
+              value={respTopicType}
+              handleChange={(e) => setRespTopicType(e.target.value)}
+              rows={2}
+            />
+
             <FormTextarea
-              labelText={'Story Topic'}
+              labelText={'Paste Story Topic'}
               labelHtmlFor={'topic'}
               inputId={'topic'}
               name={'topic'}
               inputType={'text'}
-              inputPlaceHolder={'Story goes  here '}
+              inputPlaceHolder={'Story must be pasted  here '}
               value={topic}
               handleChange={(e) => setTopic(e.target.value)}
               rows={10}
             />
+
+        
           </div>
 
           <div className='mb-6 mt-12'>

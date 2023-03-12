@@ -17,6 +17,11 @@ const blogSchema = new mongoose.Schema(
     topic: {
       type: String,
     },
+    respTopicType: {
+      type: String,
+      default: 'blog',
+    
+    },
 
     keywords: {
       type: String,

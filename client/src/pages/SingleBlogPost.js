@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom'
 
 const SingleBlogPost = () => {
   const [blogPost, setBlogPost] = useState({})
+
   const [auth, setAuth] = useAuth()
   const { user } = auth
   const params = useParams()
@@ -26,8 +27,8 @@ const SingleBlogPost = () => {
 
   return (
     <div className='max-w-screen-sm mx-auto bg-white p-6 rounded-md my-10'>
-      <div className='text-sm font-bold mt-6 p-2 bg-stone-200 rounded-sm'>
-        Blog Post
+      <div className=' font-bold mt-6 p-2 bg-stone-200 rounded-sm text-lg'>
+    {blogPost?.respTopicType?.toUpperCase()} Post
       </div>
 
       <div className='text-sm font-bold mt-6 p-2 bg-stone-200 rounded-sm'>
