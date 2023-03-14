@@ -12,7 +12,9 @@ const __dirname = path.resolve()
 //console.log(__dirname)
 
 // Sample files for testing mp3 and images
-const mp3Sound = path.join(__dirname, 'files/velociraptor.m4a')
+const mp3Sound = path.join(__dirname, 'picasso.mp3')
+
+console.log(mp3Sound)
 const image1 = path.join(__dirname, '/img1.jpg')
 const image2 = path.join(__dirname, 'man.png')
 // console.log(mp3Sound)
@@ -269,71 +271,6 @@ export const createAiImage = async (req, res) => {
 }
 
 //  Create  AI  Image  VARIATION    ======      =======     =======    >>>>>>
-// export const createAiImageVariation = async (req, res) => {
-//   try {
-
-//     // view user id as alias senderID
-//     let { _id: senderID } = req.user
-
-//     // Must check if  person is a valid user and has tokens
-//     const userProfile = await User.findById(senderID)
-
-//     if (!userProfile?.tokensAvailable) {
-//       res
-//         .status(200)
-//         .json({ message: 'No tokens available, buy more to continue' })
-//       return
-//     }
-//     userProfile.tokensAvailable = userProfile.tokensAvailable - 1
-//     userProfile.save()
-
-//     console.log(
-//       'image being prepare by SHARP  ----------------------------------------->'
-//     )
-
-//     const id = 'id' + Math.random().toString(16).slice(2)
-
-//     const getImage = async () => {
-//       let inputFile = 'img1.jpg'
-//       let ouptputFile = `${id}.png`
-//       await sharp(inputFile)
-//         .resize({ height: 512, width: 512 })
-//         .toFile(ouptputFile)
-
-//       let resp = await generateImage()
-
-//       res.status(200).json({ url: resp })
-//     }
-
-//     //  Super Important To Enphasize
-//     //   Image MUST be png of less thant 4GB  and square
-//     async function generateImage() {
-//       try {
-//         const config = new Configuration({
-//           apiKey: process.env.OPENAI_API_KEY,
-//         })
-//         const openai = new OpenAIApi(config)
-
-//         const response = await openai.createImageVariation(
-//           fs.createReadStream(`${id}.png`),
-//           1,
-//           '512x512'
-//         )
-
-//         return response.data.data[0].url
-//       } catch (error) {
-//         console.log(error)
-//       }
-//     }
-
-//     getImage()
-//   } catch (err) {
-//     // console.log(JSON.stringify(err))
-//     console.log(err.response)
-//   }
-// }
-
-//  Create  AI  Image  VARIATION    ======      =======     =======    >>>>>>
 export const createAiImageVariation = async (req, res) => {
   try {
     if (!req.files) {
@@ -419,16 +356,100 @@ export const createAiImageVariation = async (req, res) => {
   }
 }
 
+// //  WIsper   AI   Transcription   BIEN Start   ======      =======     =======    >>>>>>
+// export const whisperTranscription = async (req, res) => {
+//   try {
+//     // let { topic } = req.body
+//     // // view user id as alias senderID
+//     let { _id: senderID } = req.user
+
+//     // if (!topic) {
+//     //   res.status(422).json({ message: 'topic and keywords are required' })
+//     // }
+
+//     // Must check if  person is a valid user and has tokens
+//     const userProfile = await User.findById(senderID)
+
+//     if (!userProfile?.tokensAvailable) {
+//       res
+//         .status(200)
+//         .json({ message: 'No tokens available, buy more to continue' })
+//       return
+//     }
+//     userProfile.tokensAvailable = userProfile.tokensAvailable - 1
+//     userProfile.save()
+
+//     const config = new Configuration({
+//       apiKey: process.env.OPENAI_API_KEY,
+//     })
+//     const openai = new OpenAIApi(config)
+
+//     const response = await openai.createTranscription(
+//       fs.createReadStream(mp3Sound),
+//       'whisper-1'
+//     )
+//     const resp = response.data
+
+//     res.status(200).json(resp)
+//   } catch (error) {
+//     // res.status(400).json({ error })
+//     console.log(error)
+//   }
+// }
+
 //  WIsper   AI   Transcription     ======      =======     =======    >>>>>>
 export const whisperTranscription = async (req, res) => {
   try {
-    // let { topic } = req.body
-    // // view user id as alias senderID
-    let { _id: senderID } = req.user
+    // console.log(req.files.myMp3)
 
-    // if (!topic) {
-    //   res.status(422).json({ message: 'topic and keywords are required' })
+    // ++++++++++++++++++ how  i moved  image variation
+    // if (!req.files) {
+    //   console.log('No file uploaded')
     // }
+
+    // const productImage = req.files.photo
+    // console.log(productImage)
+
+    // if (!productImage.mimetype.startsWith('image')) {
+    //   console.log('Please Upload Image')
+    // }
+
+    // //  let imgLoc = productImage.tempFilePath.split('/').at(-1).toString()+'.jpg'
+    // let imgLoc = productImage.tempFilePath
+
+    // const imagePath = path.join(__dirname, './' + `${productImage.name}`)
+
+    // await productImage.mv(imagePath)
+
+    // ++++++++++++++++++ how  i moved  image variation   End
+    console.log(req.files.myMp3)
+    if (!req?.files?.myMp3) {
+      return res.status(422).json({ message: 'Mp3 audio is required' })
+      console.log('no file')
+    }
+
+    let mp3FileRecv = req.files.myMp3
+
+    const mp3Path = path.join(__dirname, './' + `${mp3FileRecv.name}`)
+
+    // console.log('++++++++++++++++++++++')
+    // console.log(__dirname)
+    // console.log(mp3FileRecv.name)
+    // console.log(mp3Path)
+    await mp3FileRecv.mv(mp3Path)
+
+    console.log('++++++++++++++++++++++')
+    console.log(__dirname)
+    console.log(mp3FileRecv.name)
+    console.log(mp3Path)
+
+    //console.log(__dirname)
+
+    // Mp3 file received  locaiton
+    // const mp3Sound = path.join(__dirname, `${mp3FileRecv.name}`)
+    // console.log(mp3Sound)
+
+    let { _id: senderID } = req.user
 
     // Must check if  person is a valid user and has tokens
     const userProfile = await User.findById(senderID)
@@ -448,7 +469,7 @@ export const whisperTranscription = async (req, res) => {
     const openai = new OpenAIApi(config)
 
     const response = await openai.createTranscription(
-      fs.createReadStream(mp3Sound),
+      fs.createReadStream(mp3Path),
       'whisper-1'
     )
     const resp = response.data
@@ -456,9 +477,50 @@ export const whisperTranscription = async (req, res) => {
     res.status(200).json(resp)
   } catch (error) {
     // res.status(400).json({ error })
-    console.log(error)
+    console.log(error.response)
   }
 }
+
+// //  WIsper   AI   Translation  BIEN Start   ======      =======     =======    >>>>>>
+// export const whisperTranslation = async (req, res) => {
+//   try {
+//     // let { topic } = req.body
+//     // // view user id as alias senderID
+//     let { _id: senderID } = req.user
+
+//     // if (!topic) {
+//     //   res.status(422).json({ message: 'topic and keywords are required' })
+//     // }
+
+//     // Must check if  person is a valid user and has tokens
+//     const userProfile = await User.findById(senderID)
+
+//     if (!userProfile?.tokensAvailable) {
+//       res
+//         .status(200)
+//         .json({ message: 'No tokens available, buy more to continue' })
+//       return
+//     }
+//     userProfile.tokensAvailable = userProfile.tokensAvailable - 1
+//     userProfile.save()
+
+//     const config = new Configuration({
+//       apiKey: process.env.OPENAI_API_KEY,
+//     })
+//     const openai = new OpenAIApi(config)
+
+//     const response = await openai.createTranslation(
+//       fs.createReadStream(mp3Sound),
+//       'whisper-1'
+//     )
+//     const resp = response.data
+
+//     res.status(200).json(resp)
+//   } catch (error) {
+//     // res.status(400).json({ error })
+//     console.log(error)
+//   }
+// }
 
 //  WIsper   AI   Translation    ======      =======     =======    >>>>>>
 export const whisperTranslation = async (req, res) => {
