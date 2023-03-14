@@ -29,8 +29,6 @@ const Dashboard = () => {
   // const [blogPost, setBlogPost] = useState({})
   const [blogNamesList, setBlogNamesList] = useState([])
 
-
-
   const [availableTokensLeft, setAvailableTokensLeft] = useState(null)
 
   const { user } = auth
@@ -79,15 +77,13 @@ const Dashboard = () => {
 
   const getListOfMyBlogsByName = async () => {
     try {
-      if(!filter ){
+      if (!filter) {
         const { data } = await axios.post('/api/myBlogList')
         setBlogNamesList(data)
-      }else{
-        const { data } = await axios.post('/api/myBlogList', {filter})
+      } else {
+        const { data } = await axios.post('/api/myBlogList', { filter })
         setBlogNamesList(data)
       }
-
-     
     } catch (error) {
       console.log(error)
     }
@@ -122,9 +118,16 @@ const Dashboard = () => {
 
           <Link
             to={'/'}
+            className='btnFull  bg-yellow-700 text-center px-5 mt-3  '
+          >
+            Ask Me Anithing
+          </Link>
+
+          <Link
+            to={'/blog'}
             className='btnFull  bg-yellow-600 text-center px-5 mt-4'
           >
-            New AI Post
+            New AI Blog Post
           </Link>
 
           <Link
@@ -136,9 +139,16 @@ const Dashboard = () => {
 
           <Link
             to={'/newAIImage'}
-            className='btnFull  bg-yellow-600 text-center px-5 mt-3'
+            className='btnFull  bg-green-600 text-center px-5 mt-3'
           >
             New AI Image
+          </Link>
+
+          <Link
+            to={'/imageVariation'}
+            className='btnFull  bg-green-800 text-center px-5 mt-3'
+          >
+            AI Image variation
           </Link>
 
           <Link
@@ -159,22 +169,29 @@ const Dashboard = () => {
 
             <button
               onClick={() => setFilter('')}
-              className='btnNormal px-2   bg-red-500/50'
+              className='btnNormal px-1   bg-red-500/50'
             >
               ALL
             </button>
 
             <button
               onClick={() => setFilter('blog')}
-              className='btnNormal px-2   bg-yellow-400/50'
+              className='btnNormal px-1   bg-yellow-400/50'
             >
               Blogs
             </button>
             <button
               onClick={() => setFilter('news')}
-              className='btnNormal  px-2  bg-green-500/50'
+              className='btnNormal  px-1  bg-green-500/50'
             >
               News
+            </button>
+
+            <button
+              onClick={() => setFilter('question')}
+              className='btnNormal px-1   bg-yellow-400/50'
+            >
+              Question
             </button>
           </div>
           {blogNamesList?.map((post) => {

@@ -9,6 +9,8 @@ import BuyTokens from './components/BuyTokens'
 import NewDalleImageReqForm from './components/NewDalleImageReqForm'
 import NewParaphaseTranslateForm from './components/NewParaphaseTranslateForm'
 import PageNotFound from './pages/PageNotFound'
+import AskAnytthingForm from './components/AskAnytthingForm'
+import NewDalleImageVariationForm from './components/NewDalleImageVariationForm'
 
 function App() {
   return (
@@ -17,13 +19,20 @@ function App() {
 
       <Routes>
         <Route path='/' element={<Dashboard />}>
-          <Route index element={<NewBlogReqForm />} />
+          <Route index element={<AskAnytthingForm />} />
+          <Route path='blog' element={<NewBlogReqForm />} />
           <Route
             path='paraphraseTranslate'
             element={<NewParaphaseTranslateForm />}
           />
           <Route path='buyTokens' element={<BuyTokens />} />
+
+          {/* Images */}
           <Route path='newAIImage' element={<NewDalleImageReqForm />} />
+          <Route
+            path='imageVariation'
+            element={<NewDalleImageVariationForm />}
+          />
 
           <Route path='singlePost/:id' element={<SingleBlogPost />} />
         </Route>

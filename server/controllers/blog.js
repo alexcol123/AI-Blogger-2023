@@ -9,7 +9,7 @@ import { Configuration, OpenAIApi } from 'openai'
 
 // FOR MP3 sound testing    =======       =======      =======     >>>
 const __dirname = path.resolve()
-// console.log(__dirname)
+//console.log(__dirname)
 
 // Sample files for testing mp3 and images
 const mp3Sound = path.join(__dirname, 'files/velociraptor.m4a')
@@ -19,7 +19,73 @@ const image2 = path.join(__dirname, 'man.png')
 // console.log(__dirname)
 // console.log(image1)
 
-//  Create  AI  Blog      ======      =======     =======    >>>>>>
+//  Create  AI  Question      ======      =======     =======    >>>>>>
+export const question = async (req, res) => {
+  try {
+    let { topic, respTopicType } = req.body
+    // view user id as alias senderID
+    let { _id: senderID } = req.user
+
+    if (!topic || !respTopicType) {
+      res.status(422).json({ message: 'topic and respTopicType are required' })
+    }
+
+    // Must check if  person is a valid user and has tokens
+    const userProfile = await User.findById(senderID)
+
+    if (!userProfile?.tokensAvailable) {
+      res
+        .status(200)
+        .json({ message: 'No tokens available, buy more to continue' })
+      return
+    }
+
+    // // Lower token by 1    =======       =======      =======     >>>
+    userProfile.tokensAvailable = userProfile.tokensAvailable - 1
+
+    userProfile.save()
+
+    // OPEN AI  SETUP    =======       =======      =======     >>>
+
+    const config = new Configuration({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+    const openai = new OpenAIApi(config)
+
+    const response = await openai.createCompletion({
+      model: 'text-davinci-003',
+      temperature: 0,
+      max_tokens: 3600,
+      prompt: `Answer this quesitons  ${topic} . The content should be formated in SEO-friendly HTML. The response must include appropiate HTML title and meta description. The return format must be stringified JSON  in the following format:
+      {
+        "postContent": post content here
+        "title": title goes here
+        "metaDescription: meta description goes here
+
+      } `,
+    })
+
+    // Response   =======       =======      =======     >>>
+
+    const resp = response.data.choices[0]?.text.split('\n').join('')
+
+    const parsedResp = await JSON.parse(resp)
+
+    const blogPostCreated = await Blog.create({
+      postContent: parsedResp?.postContent,
+      title: parsedResp?.title,
+      metaDescription: parsedResp?.metaDescription,
+      respTopicType,
+      topic,
+      createdBy: senderID,
+    })
+
+    res.status(200).json({ post: blogPostCreated })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 //  Create  AI  Blog      ======      =======     =======    >>>>>>
 export const create = async (req, res) => {
   try {
@@ -203,9 +269,95 @@ export const createAiImage = async (req, res) => {
 }
 
 //  Create  AI  Image  VARIATION    ======      =======     =======    >>>>>>
+// export const createAiImageVariation = async (req, res) => {
+//   try {
+
+//     // view user id as alias senderID
+//     let { _id: senderID } = req.user
+
+//     // Must check if  person is a valid user and has tokens
+//     const userProfile = await User.findById(senderID)
+
+//     if (!userProfile?.tokensAvailable) {
+//       res
+//         .status(200)
+//         .json({ message: 'No tokens available, buy more to continue' })
+//       return
+//     }
+//     userProfile.tokensAvailable = userProfile.tokensAvailable - 1
+//     userProfile.save()
+
+//     console.log(
+//       'image being prepare by SHARP  ----------------------------------------->'
+//     )
+
+//     const id = 'id' + Math.random().toString(16).slice(2)
+
+//     const getImage = async () => {
+//       let inputFile = 'img1.jpg'
+//       let ouptputFile = `${id}.png`
+//       await sharp(inputFile)
+//         .resize({ height: 512, width: 512 })
+//         .toFile(ouptputFile)
+
+//       let resp = await generateImage()
+
+//       res.status(200).json({ url: resp })
+//     }
+
+//     //  Super Important To Enphasize
+//     //   Image MUST be png of less thant 4GB  and square
+//     async function generateImage() {
+//       try {
+//         const config = new Configuration({
+//           apiKey: process.env.OPENAI_API_KEY,
+//         })
+//         const openai = new OpenAIApi(config)
+
+//         const response = await openai.createImageVariation(
+//           fs.createReadStream(`${id}.png`),
+//           1,
+//           '512x512'
+//         )
+
+//         return response.data.data[0].url
+//       } catch (error) {
+//         console.log(error)
+//       }
+//     }
+
+//     getImage()
+//   } catch (err) {
+//     // console.log(JSON.stringify(err))
+//     console.log(err.response)
+//   }
+// }
+
+//  Create  AI  Image  VARIATION    ======      =======     =======    >>>>>>
 export const createAiImageVariation = async (req, res) => {
   try {
-    // view user id as alias senderID
+    if (!req.files) {
+      console.log('No file uploaded')
+    }
+
+    const productImage = req.files.photo
+    console.log(productImage)
+
+    if (!productImage.mimetype.startsWith('image')) {
+      console.log('Please Upload Image')
+    }
+
+    //  let imgLoc = productImage.tempFilePath.split('/').at(-1).toString()+'.jpg'
+    let imgLoc = productImage.tempFilePath
+
+    // const imagePath = path.join(__dirname, './public/' + `${productImage.name}`)
+    const imagePath = path.join(__dirname, './' + `${productImage.name}`)
+
+    await productImage.mv(imagePath)
+
+    console.log(productImage.name)
+
+    //     // view user id as alias senderID
     let { _id: senderID } = req.user
 
     // Must check if  person is a valid user and has tokens
@@ -227,7 +379,8 @@ export const createAiImageVariation = async (req, res) => {
     const id = 'id' + Math.random().toString(16).slice(2)
 
     const getImage = async () => {
-      let inputFile = 'img1.jpg'
+      // let inputFile = 'img1.jpg'
+      let inputFile = `${productImage.name}`
       let ouptputFile = `${id}.png`
       await sharp(inputFile)
         .resize({ height: 512, width: 512 })
@@ -368,24 +521,18 @@ export const allBlogsByUser = async (req, res) => {
     let myFilter = {}
     myFilter.createdBy = req.user._id
 
-
     if (req.body.filter && req.body.filter !== '')
       myFilter.respTopicType = req.body.filter
-    console.log(myFilter)
-
-    console.log(req.body)
 
     // !req.body || req.body.length === 0
     //   ? (myFilter = {})
     //   : (myFilter = req.body.filter)
 
     const singleUserBlogList = await Blog.find(
-      myFilter,
+      myFilter
       // createdBy: senderID,
       // // respTopicType: myFilter,
     ).select('title _id')
-
-    console.log(singleUserBlogList)
 
     res.status(200).json(singleUserBlogList)
   } catch (error) {

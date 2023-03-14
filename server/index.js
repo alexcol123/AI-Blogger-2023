@@ -3,9 +3,14 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import morgan from 'morgan'
+import path from 'path'
 
 import authRoutes from './routes/auth.js'
 import blogRoutes from './routes/blog.js'
+
+import fileUpload from 'express-fileupload'
+
+const __dirname = path.resolve()
 
 dotenv.config()
 const app = express()
@@ -19,12 +24,19 @@ mongoose
 
 // Middlewares
 app.use(cors())
+
+app.use(express.static('./public'))
+
+
+app.use(fileUpload({ useTempFiles: true, tempFileDir: '' }))
+// app.use(fileUpload({ useTempFiles: true }))
+
 app.use(express.json())
+
 app.use(morgan('dev'))
 
 // Sample route
 app.get('/users', (req, res) => {
-
   res.json({ data: 'Alexopolis Xersis Phersepolis ' })
 })
 

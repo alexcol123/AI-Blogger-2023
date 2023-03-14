@@ -1,4 +1,5 @@
 import express from 'express'
+import formidable from 'express-formidable'
 import { requireSignin } from '../middlewares/auth.js'
 import {
   create,
@@ -9,13 +10,20 @@ import {
   singleUserBlog,
   createAiImage,
   createAiImageVariation,
-  buyFakeTokens,translateAndParaphraseNewsStory
+  buyFakeTokens,
+  translateAndParaphraseNewsStory,
+  question,
 } from '../controllers/blog.js'
 
 const router = express.Router()
 
+router.post('/question', requireSignin, question)
 router.post('/create', requireSignin, create)
-router.post('/translateAndParaphraseNewsStory', requireSignin, translateAndParaphraseNewsStory)
+router.post(
+  '/translateAndParaphraseNewsStory',
+  requireSignin,
+  translateAndParaphraseNewsStory
+)
 
 router.post('/create-ai-image', requireSignin, createAiImage)
 router.post('/create-ai-image-variation', requireSignin, createAiImageVariation)
