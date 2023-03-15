@@ -422,13 +422,18 @@ export const whisperTranscription = async (req, res) => {
     // await productImage.mv(imagePath)
 
     // ++++++++++++++++++ how  i moved  image variation   End
-    console.log(req.files.myMp3)
-    if (!req?.files?.myMp3) {
+
+    if (!req.files) {
       return res.status(422).json({ message: 'Mp3 audio is required' })
-      console.log('no file')
     }
 
     let mp3FileRecv = req.files.myMp3
+
+    console.log(mp3FileRecv)
+
+    if (!mp3FileRecv.mimetype.startsWith('audio')) {
+      return res.status(422).json({ message: 'Please upload an audio file' })
+    }
 
     const mp3Path = path.join(__dirname, './' + `${mp3FileRecv.name}`)
 
@@ -524,14 +529,17 @@ export const whisperTranscription = async (req, res) => {
 
 //  WIsper   AI   Translation    ======      =======     =======    >>>>>>
 export const whisperTranslation = async (req, res) => {
+  console.log('translating ====       ====    >>>>>>')
   try {
-    console.log(req.files.myMp3)
-    if (!req?.files?.myMp3) {
+    if (!req.files) {
       return res.status(422).json({ message: 'Mp3 audio is required' })
-      console.log('no file')
     }
 
     let mp3FileRecv = req.files.myMp3
+
+    if (!mp3FileRecv.mimetype.startsWith('audio')) {
+      return res.status(422).json({ message: 'Please upload an audio file' })
+    }
 
     const mp3Path = path.join(__dirname, './' + `${mp3FileRecv.name}`)
 
