@@ -125,30 +125,44 @@ const Dashboard = () => {
 
           <Link
             to={'/blog'}
-            className='btnFull  bg-yellow-600 text-center px-5 mt-4'
+            className='btnFull  bg-yellow-600 text-center px-5 mt-2'
           >
             New AI Blog Post
           </Link>
 
           <Link
             to={'/paraphraseTranslate'}
-            className='btnFull  bg-yellow-700 text-center px-5 mt-3  '
+            className='btnFull  bg-yellow-700 text-center px-5 mt-2  '
           >
             Paraphrase + Translate
           </Link>
 
           <Link
             to={'/newAIImage'}
-            className='btnFull  bg-green-600 text-center px-5 mt-3'
+            className='btnFull  bg-green-600 text-center px-5 mt-2'
           >
             New AI Image
           </Link>
 
           <Link
             to={'/imageVariation'}
-            className='btnFull  bg-green-800 text-center px-5 mt-3'
+            className='btnFull  bg-green-800 text-center px-5 mt-2'
           >
             AI Image variation
+          </Link>
+
+          <Link
+            to={'/audioTranscription'}
+            className='btnFull  bg-red-700 text-center px-5 mt-2'
+          >
+            Audio Transcription
+          </Link>
+
+          <Link
+            to={'/audioTranslation'}
+            className='btnFull  bg-red-800 text-center px-5 mt-2'
+          >
+            Audio Translation to ENGLISH
           </Link>
 
           <Link
