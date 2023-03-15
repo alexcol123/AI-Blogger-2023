@@ -28,7 +28,8 @@ const AudioTranslationForm = () => {
       setaudioRespURL(data.text)
     } catch (error) {
       console.log(error)
-      toast.error('You must login to do this image')
+
+      toast.error(error.response.data.message)
     }
   }
 
@@ -41,7 +42,11 @@ const AudioTranslationForm = () => {
         >
           <h3 className='text-center text-2xl '> AI Audio-Transcription</h3>
 
-          {audio && <h5 className='p-2 bg-yellow-700 text-white rounded max-w-fit  '>{audio.name}</h5>}
+          {audio && (
+            <h5 className='p-2 bg-yellow-700 text-white rounded max-w-fit  '>
+              {audio.name}
+            </h5>
+          )}
 
           <div className='mt-6 grid gap-6'>
             <label

@@ -24,10 +24,13 @@ const AudioTranscriptionForm = () => {
 
       const { data } = await axios.post('api/create-transcription', productData)
       console.log(data)
+
+      if (data.message) console.log(data.message)
       setaudioRespURL(data.text)
     } catch (error) {
       console.log(error)
-      toast.error('You must login to do this image')
+
+      toast.error(error.response.data.message)
     }
   }
 
