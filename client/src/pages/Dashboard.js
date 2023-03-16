@@ -125,6 +125,13 @@ const Dashboard = () => {
           </Link>
 
           <Link
+            to={'/user/dashboard/models'}
+            className='btnFull  bg-blue-700 text-center px-5   '
+          >
+      List Models
+          </Link>
+
+          <Link
             to={'/user/dashboard/blog'}
             className='btnFull  bg-yellow-600 text-center px-5 '
           >

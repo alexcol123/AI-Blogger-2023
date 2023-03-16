@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 const Loading = () => {
   let [counter, setCounter] = useState(0)
 
-  console.log('outside counter ', counter)
+  // console.log('outside counter ', counter)
   const [dataArr, setDataArr] = useState([
     'Analyzing',
     'Collecting Data',
@@ -12,8 +12,8 @@ const Loading = () => {
     'Finalizing',
   ])
 
-  console.log('counter =', counter)
-  console.log(dataArr.length)
+  // console.log('counter =', counter)
+  // console.log(dataArr.length)
 
   useEffect(() => {
     const interval = setInterval(() => {

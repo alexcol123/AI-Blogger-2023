@@ -19,8 +19,6 @@ const Register = () => {
 
   const [register, setRegister] = useState(false)
 
-  console.log(register)
-
   const handleChange = (e) => {
     const name = e.target.name
     const value = e.target.value

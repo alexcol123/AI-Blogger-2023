@@ -22,6 +22,25 @@ const image2 = path.join(__dirname, 'man.png')
 // console.log(image1)
 
 //  Create  AI  Question      ======      =======     =======    >>>>>>
+export const listAIModels = async (req, res) => {
+  try {
+    const config = new Configuration({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+    const openai = new OpenAIApi(config)
+
+    const response = await openai.listEngines()
+
+    // Response   =======       =======      =======     >>>
+    // console.log(response.data.data[0])
+
+    res.status(200).json(response.data.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+//  Create  AI  Question      ======      =======     =======    >>>>>>
 export const question = async (req, res) => {
   try {
     let { topic, respTopicType } = req.body
@@ -67,11 +86,78 @@ export const question = async (req, res) => {
     })
 
     // Response   =======       =======      =======     >>>
-    console.log(response)
+
+    const resp = response.data.choices[0]?.text.split('\n').join('')
+
+    const parsedResp = await JSON.parse(resp)
+
+    const blogPostCreated = await Blog.create({
+      postContent: parsedResp?.postContent,
+      title: parsedResp?.title,
+      metaDescription: parsedResp?.metaDescription,
+      respTopicType,
+      topic,
+      createdBy: senderID,
+    })
+
+    res.status(200).json({ post: blogPostCreated })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+//  Create  AI  Question      ======      =======     =======    >>>>>>
+export const questionModel = async (req, res) => {
+  try {
+    let { topic, respTopicType, modelSelected } = req.body
+
+    // view user id as alias senderID
+    let { _id: senderID } = req.user
+
+    if (!topic || !respTopicType || !modelSelected) {
+      res
+        .status(422)
+        .json({ message: 'topic, respTopicType and model are required' })
+    }
+
+    // Must check if  person is a valid user and has tokens
+    const userProfile = await User.findById(senderID)
+
+    if (!userProfile?.tokensAvailable) {
+      res
+        .status(200)
+        .json({ message: 'No tokens available, buy more to continue' })
+      return
+    }
+
+    // // Lower token by 1    =======       =======      =======     >>>
+    userProfile.tokensAvailable = userProfile.tokensAvailable - 1
+
+    userProfile.save()
+
+    // OPEN AI  SETUP    =======       =======      =======     >>>
+
+    const config = new Configuration({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+    const openai = new OpenAIApi(config)
+
+    console.log('hea------------------------------')
+
+    const response = await openai.createCompletion({
+      model: modelSelected,
+      temperature: 0.5,
+      max_tokens: 300,
+      prompt: topic,
+    })
+
+    // Response   =======       =======      =======     >>>
+
+    const resp = response.data.choices[0]
+
+    console.log(resp)
 
     // const resp = response.data.choices[0]?.text.split('\n').join('')
-
-
 
     // const parsedResp = await JSON.parse(resp)
 
@@ -84,9 +170,10 @@ export const question = async (req, res) => {
     //   createdBy: senderID,
     // })
 
-    // res.status(200).json({ post: blogPostCreated })
+    res.status(200).json(resp)
   } catch (error) {
-    console.log(error)
+    console.log('eror ')
+    console.log(error.response.data.error.message)
   }
 }
 
@@ -487,47 +574,6 @@ export const whisperTranscription = async (req, res) => {
     console.log(error.response)
   }
 }
-
-// //  WIsper   AI   Translation  BIEN Start   ======      =======     =======    >>>>>>
-// export const whisperTranslation = async (req, res) => {
-//   try {
-//     // let { topic } = req.body
-//     // // view user id as alias senderID
-//     let { _id: senderID } = req.user
-
-//     // if (!topic) {
-//     //   res.status(422).json({ message: 'topic and keywords are required' })
-//     // }
-
-//     // Must check if  person is a valid user and has tokens
-//     const userProfile = await User.findById(senderID)
-
-//     if (!userProfile?.tokensAvailable) {
-//       res
-//         .status(200)
-//         .json({ message: 'No tokens available, buy more to continue' })
-//       return
-//     }
-//     userProfile.tokensAvailable = userProfile.tokensAvailable - 1
-//     userProfile.save()
-
-//     const config = new Configuration({
-//       apiKey: process.env.OPENAI_API_KEY,
-//     })
-//     const openai = new OpenAIApi(config)
-
-//     const response = await openai.createTranslation(
-//       fs.createReadStream(mp3Sound),
-//       'whisper-1'
-//     )
-//     const resp = response.data
-
-//     res.status(200).json(resp)
-//   } catch (error) {
-//     // res.status(400).json({ error })
-//     console.log(error)
-//   }
-// }
 
 //  WIsper   AI   Translation    ======      =======     =======    >>>>>>
 export const whisperTranslation = async (req, res) => {

@@ -14,6 +14,7 @@ import NewDalleImageVariationForm from './components/NewDalleImageVariationForm'
 import AudioTranscriptionForm from './components/AudioTranscriptionForm'
 import AudioTranslationForm from './components/AudioTranslationForm'
 import PrivateRoute from './components/Routes/PrivateRoute'
+import ListModels from './components/ListModels'
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
         <Route path='/user' element={<PrivateRoute />}>
           <Route path='dashboard' element={<Dashboard />}>
             <Route index  element={<AskAnytthingForm />} />
+
+            <Route path='models'  element={<ListModels />} />
             {/* AI */}
 
             <Route path='blog' element={<NewBlogReqForm />} />

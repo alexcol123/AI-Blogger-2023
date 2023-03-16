@@ -7,15 +7,14 @@ import Register from '../../pages/Register'
 const PrivateRoute = () => {
   // Context
   const [auth, setAuth] = useAuth()
-  
+
   // State
   const [ok, setOk] = useState(null)
-
 
   const authCheck = async () => {
     const { data } = await axios.get(`/api/auth-check`)
 
-    console.log(data)
+    // console.log(data)
 
     if (data.ok) {
       setOk(true)

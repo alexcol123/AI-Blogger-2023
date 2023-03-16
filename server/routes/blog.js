@@ -13,11 +13,14 @@ import {
   buyFakeTokens,
   translateAndParaphraseNewsStory,
   question,
+  questionModel,
+  listAIModels
 } from '../controllers/blog.js'
 
 const router = express.Router()
 
 router.post('/question', requireSignin, question)
+router.post('/question-model', requireSignin, questionModel)
 router.post('/create', requireSignin, create)
 router.post(
   '/translateAndParaphraseNewsStory',
@@ -36,4 +39,8 @@ router.post('/myBlogList', requireSignin, allBlogsByUser)
 router.get('/mySingleBlog/:blogId', requireSignin, singleUserBlog)
 
 router.get('/buy-fake-tokens', requireSignin, buyFakeTokens)
+
+
+// Get Open Ai Model list 
+router.get('/ai-models', requireSignin, listAIModels)
 export default router

@@ -9,6 +9,9 @@ const FormSelect = ({
   value,
   handleChange,
 }) => {
+
+
+
   const updetedListOfOptions = ['select one', ...listOfOptions]
   return (
     <div>
@@ -26,8 +29,8 @@ const FormSelect = ({
         onChange={handleChange}
       >
         {updetedListOfOptions.map((itemValue, index) => (
-          <option key={index} value={index === 0 ? '' : itemValue}>
-            {itemValue}
+          <option key={index} value={index === 0 ? '' : itemValue.id}>
+            {itemValue.id}
           </option>
         ))}
       </select>
