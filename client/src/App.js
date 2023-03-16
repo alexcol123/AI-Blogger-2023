@@ -13,45 +13,79 @@ import AskAnytthingForm from './components/AskAnytthingForm'
 import NewDalleImageVariationForm from './components/NewDalleImageVariationForm'
 import AudioTranscriptionForm from './components/AudioTranscriptionForm'
 import AudioTranslationForm from './components/AudioTranslationForm'
+import PrivateRoute from './components/Routes/PrivateRoute'
 
 function App() {
   return (
     <BrowserRouter>
       <Toaster position='top-center' />
-
       <Routes>
-        <Route path='/' element={<Dashboard />}>
-          {/* AI */}
-          <Route index element={<AskAnytthingForm />} />
-          <Route path='blog' element={<NewBlogReqForm />} />
-          <Route
-            path='paraphraseTranslate'
-            element={<NewParaphaseTranslateForm />}
-          />
+        <Route path='/user' element={<PrivateRoute />}>
+          <Route path='dashboard' element={<Dashboard />}>
+            <Route index  element={<AskAnytthingForm />} />
+            {/* AI */}
 
-          {/* Images */}
-          <Route path='newAIImage' element={<NewDalleImageReqForm />} />
-          <Route
-            path='imageVariation'
-            element={<NewDalleImageVariationForm />}
-          />
-          {/* Audio */}
-          <Route
-            path='audioTranscription'
-            element={<AudioTranscriptionForm />}
-          />
-          <Route path='audioTranslation' element={<AudioTranslationForm />} />
+            <Route path='blog' element={<NewBlogReqForm />} />
+            <Route
+              path='paraphraseTranslate'
+              element={<NewParaphaseTranslateForm />}
+            />
+
+            {/* Images */}
+            <Route path='newAIImage' element={<NewDalleImageReqForm />} />
+            <Route
+              path='imageVariation'
+              element={<NewDalleImageVariationForm />}
+            />
+            {/* Audio */}
+            <Route
+              path='audioTranscription'
+              element={<AudioTranscriptionForm />}
+            />
+            <Route path='audioTranslation' element={<AudioTranslationForm />} />
+
+            <Route path='singlePost/:id' element={<SingleBlogPost />} />
+            <Route path='buyTokens' element={<BuyTokens />} />1
+          </Route>
 
           {/* Others */}
-          <Route path='buyTokens' element={<BuyTokens />} />
-          <Route path='singlePost/:id' element={<SingleBlogPost />} />
+
+
         </Route>
         <Route path='*' element={<PageNotFound />} />
         <Route path='/register' element={<Register />} />
-        <Route path='/landing' element={<Landing />} />
+        <Route path='/' element={<Landing />} />
       </Routes>
     </BrowserRouter>
   )
 }
 
 export default App
+
+const oldrutes = (
+  <Routes>
+    <Route path='/' element={<Dashboard />}>
+      {/* AI */}
+      <Route index element={<AskAnytthingForm />} />
+      <Route path='blog' element={<NewBlogReqForm />} />
+      <Route
+        path='paraphraseTranslate'
+        element={<NewParaphaseTranslateForm />}
+      />
+
+      {/* Images */}
+      <Route path='newAIImage' element={<NewDalleImageReqForm />} />
+      <Route path='imageVariation' element={<NewDalleImageVariationForm />} />
+      {/* Audio */}
+      <Route path='audioTranscription' element={<AudioTranscriptionForm />} />
+      <Route path='audioTranslation' element={<AudioTranslationForm />} />
+
+      {/* Others */}
+      <Route path='buyTokens' element={<BuyTokens />} />
+      <Route path='singlePost/:id' element={<SingleBlogPost />} />
+    </Route>
+    <Route path='*' element={<PageNotFound />} />
+    <Route path='/register' element={<Register />} />
+    <Route path='/landing' element={<Landing />} />
+  </Routes>
+)

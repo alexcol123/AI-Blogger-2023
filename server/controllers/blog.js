@@ -63,26 +63,28 @@ export const question = async (req, res) => {
         "postContent": post content here
         "title": title goes here
         "metaDescription: meta description goes here
-
       } `,
     })
 
     // Response   =======       =======      =======     >>>
+    console.log(response)
 
-    const resp = response.data.choices[0]?.text.split('\n').join('')
+    // const resp = response.data.choices[0]?.text.split('\n').join('')
 
-    const parsedResp = await JSON.parse(resp)
 
-    const blogPostCreated = await Blog.create({
-      postContent: parsedResp?.postContent,
-      title: parsedResp?.title,
-      metaDescription: parsedResp?.metaDescription,
-      respTopicType,
-      topic,
-      createdBy: senderID,
-    })
 
-    res.status(200).json({ post: blogPostCreated })
+    // const parsedResp = await JSON.parse(resp)
+
+    // const blogPostCreated = await Blog.create({
+    //   postContent: parsedResp?.postContent,
+    //   title: parsedResp?.title,
+    //   metaDescription: parsedResp?.metaDescription,
+    //   respTopicType,
+    //   topic,
+    //   createdBy: senderID,
+    // })
+
+    // res.status(200).json({ post: blogPostCreated })
   } catch (error) {
     console.log(error)
   }

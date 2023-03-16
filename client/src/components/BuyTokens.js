@@ -34,7 +34,7 @@ const BuyTokens = ({
       console.log(data.message)
       setLoading(false)
       if (data.message === 'success') {
-        navigate('/dashboard')
+        navigate('/')
       }
     } catch (error) {
       console.log(error)

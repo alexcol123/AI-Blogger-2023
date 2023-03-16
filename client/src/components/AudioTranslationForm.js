@@ -27,7 +27,7 @@ const AudioTranslationForm = () => {
       console.log(data)
       setaudioRespURL(data.text)
     } catch (error) {
-      console.log(error)
+     
 
       toast.error(error.response.data.message)
     }

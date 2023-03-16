@@ -53,10 +53,10 @@ const Register = () => {
         if (data.error) return toast.error(data.error)
         else {
           toast.success('Login successful')
-     
+
           setAuth(data)
           localStorage.setItem('auth', JSON.stringify(data))
-          navigate('/')
+          navigate('/user/dashboard')
         }
       } catch (error) {
         console.log(error)
@@ -131,8 +131,6 @@ const Register = () => {
             </button>
           </p>
         </form>
-
-    
       </div>
     </div>
   )

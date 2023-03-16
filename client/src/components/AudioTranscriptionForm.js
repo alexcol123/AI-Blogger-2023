@@ -28,8 +28,6 @@ const AudioTranscriptionForm = () => {
       if (data.message) console.log(data.message)
       setaudioRespURL(data.text)
     } catch (error) {
-      console.log(error)
-
       toast.error(error.response.data.message)
     }
   }

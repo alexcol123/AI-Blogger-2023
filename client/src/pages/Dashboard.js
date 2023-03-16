@@ -38,7 +38,7 @@ const Dashboard = () => {
 
     setAuth({ ...auth, user: null, token: '' })
     localStorage.removeItem('auth')
-    navigate('/landing')
+    navigate('/')
   }
 
   // const handleNewBlogRequest = async (e) => {
@@ -116,57 +116,58 @@ const Dashboard = () => {
             <Logo />
           </div>
 
+
           <Link
-            to={'/'}
+            to={'/user/dashboard'}
             className='btnFull  bg-yellow-700 text-center px-5 mt-3  '
           >
             Ask Me Anithing
           </Link>
 
           <Link
-            to={'/blog'}
-            className='btnFull  bg-yellow-600 text-center px-5 mt-2'
+            to={'/user/dashboard/blog'}
+            className='btnFull  bg-yellow-600 text-center px-5 '
           >
             New AI Blog Post
           </Link>
 
           <Link
-            to={'/paraphraseTranslate'}
-            className='btnFull  bg-yellow-700 text-center px-5 mt-2  '
+            to={'/user/dashboard/paraphraseTranslate'}
+            className='btnFull  bg-yellow-700 text-center px-5   '
           >
             Paraphrase + Translate
           </Link>
 
           <Link
-            to={'/newAIImage'}
-            className='btnFull  bg-green-600 text-center px-5 mt-2'
+            to={'/user/dashboard/newAIImage'}
+            className='btnFull  bg-green-600 text-center px-5 '
           >
             New AI Image
           </Link>
 
           <Link
-            to={'/imageVariation'}
-            className='btnFull  bg-green-800 text-center px-5 mt-2'
+            to={'/user/dashboard/imageVariation'}
+            className='btnFull  bg-green-800 text-center px-5 '
           >
             AI Image variation
           </Link>
 
           <Link
-            to={'/audioTranscription'}
-            className='btnFull  bg-red-700 text-center px-5 mt-2'
+            to={'/user/dashboard/audioTranscription'}
+            className='btnFull  bg-red-700 text-center px-5 '
           >
             Audio Transcription
           </Link>
 
           <Link
-            to={'/audioTranslation'}
-            className='btnFull  bg-red-800 text-center px-5 mt-2'
+            to={'/user/dashboard/audioTranslation'}
+            className='btnFull  bg-red-800 text-center px-5 '
           >
             Audio Translation to ENGLISH
           </Link>
 
           <Link
-            to='/buyTokens'
+            to='/user/dashboard/buyTokens'
             className=' flex justify-center items-center mt-2 bg-white/10 p-2 px-4 rounded  hover:bg-white/30 ease-in '
           >
             <GiTwoCoins size={25} className='text-yellow-600  ' />
@@ -212,7 +213,7 @@ const Dashboard = () => {
             return (
               <Link
                 key={post._id}
-                to={`singlePost/${post._id}`}
+                to={`/user/dashboard/singlePost/${post._id}`}
                 className={`mb-2 text-md bg-white/10 p-1  px-2 rounded   ease-in      ${
                   post._id === currentPostId && 'text-yellow-600 bg-black/40'
                 } `}
@@ -240,7 +241,7 @@ const Dashboard = () => {
             type='button'
             onClick={logout}
             className='text-sm '
-            href='/logout'
+       
           >
             <BiLogOutCircle
               size={30}

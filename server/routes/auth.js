@@ -1,5 +1,6 @@
 import express from 'express'
 import { register, login } from '../controllers/auth.js'
+import { requireSignin } from '../middlewares/auth.js'
 
 const router = express.Router()
 
@@ -9,6 +10,8 @@ const router = express.Router()
 router.post('/register', register)
 router.post('/login', login)
 
-router.post('/test', ()=> console.log('test'))
+router.get('/auth-check', requireSignin, (req, res) => res.json({ ok: true }))
+
+router.post('/test', () => console.log('test'))
 
 export default router
