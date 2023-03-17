@@ -6,25 +6,24 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/auth'
 
 const TestDashboard = () => {
-
-console.log(signOut)
-
   // Ctx
   const [auth, setAuth] = useAuth()
 
-  const  fbAuth  = getAuth()
+  const fbAuth = getAuth()
 
   //
   const navigate = useNavigate()
 
   const logout = () => {
-    signOut(fbAuth).then(() => {
-      // Sign-out successful..
-      console.log('Sign-out successful. ')
-    }).catch((error) => {
-      // An error happened.
-      console.log(error)
-    });
+    signOut(fbAuth)
+      .then(() => {
+        // Sign-out successful..
+        console.log('Sign-out successful. ')
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log(error)
+      })
 
     setAuth({
       user: null,

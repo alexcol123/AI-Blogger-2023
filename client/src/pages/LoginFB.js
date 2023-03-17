@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import Logo from '../components/Logo'
+import { FcGoogle } from 'react-icons/fc'
 import FormInput from '../components/formParts/FormInput'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/auth'
-import { auth as fbAuth } from '../firebase'
+import { auth as fbAuth, googleAuthProvider } from '../firebase'
 
 const LoginFB = () => {
   const [values, setValues] = useState({
@@ -68,6 +69,28 @@ const LoginFB = () => {
     // setValues({ ...values, email: '' })
   }
 
+  const googleLogin = async () => {
+    const result = await fbAuth
+      .signInWithPopup(googleAuthProvider)
+      .then(async (result) => {
+        const { user } = result
+        const idTokenResult = await user.getIdTokenResult()
+
+        // To do work on my backend
+
+        setAuth({
+          user: user.email,
+          fbToken: idTokenResult.token,
+        })
+
+        navigate('/dashboard-test')
+      })
+      .catch((err) => {
+        console.log(err)
+        toast.errror(err.message)
+      })
+  }
+
   return (
     <div className='h-screen  w-screen  flex items-center  justify-center bg-blue-100  '>
       <div className='w-[400px]'>
@@ -107,9 +130,21 @@ const LoginFB = () => {
           <div className='mb-6 mt-12'>
             <button
               disabled={loading}
-              className='btnFull bg-primary text-white'
+              className='btnFull bg-primary text-white '
             >
               {loading ? 'Loading... ' : 'Login'}
+            </button>
+          </div>
+
+          <div className='mb-6 mt-6'>
+            <button
+              type='button'
+              onClick={googleLogin}
+              disabled={loading}
+              className='btnFull bg-white text-gray-700  border border-md border-black/10 flex justify-center items-center '
+            >
+              <FcGoogle className='mr-3' size={25} />
+              Continue with Google
             </button>
           </div>
 
