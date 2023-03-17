@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/auth'
 import { auth as fbAuth } from '../firebase'
 
-const RegisterFB = () => {
+const LoginFB = () => {
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -15,9 +15,9 @@ const RegisterFB = () => {
 
   const [auth, setAuth] = useAuth()
 
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
 
-  const [register, setRegister] = useState(false)
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const name = e.target.name
@@ -26,26 +26,46 @@ const RegisterFB = () => {
     setValues({ ...values, [name]: value })
   }
 
-  console.log(values.email)
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const config = {
-      url: process.env.REACT_APP_REGISTER_REDIRECT_URL,
-      handleCodeInApp: true,
+    try {
+      setLoading(true)
+      const result = await fbAuth.signInWithEmailAndPassword(
+        values.email,
+        values.password
+      )
+      const { user } = result
+      const idTokenResult = await user.getIdTokenResult()
+
+      setAuth({
+        user: user.email,
+        fbToken: idTokenResult.token,
+      })
+
+      navigate('/dashboard-test')
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+      setLoading(false)
     }
 
-    await fbAuth.sendSignInLinkToEmail(values.email, config)
+    // const config = {
+    //   url: process.env.REACT_APP_REGISTER_REDIRECT_URL,
+    //   handleCodeInApp: true,
+    // }
 
-    toast.success(
-      `Email sent to ${values.email}. Open your email and complete registration`
-    )
+    // await fbAuth.sendSignInLinkToEmail(values.email, config)
 
-    // save email in LS
-    localStorage.setItem('emailForRegistration', values.email)
+    // toast.success(
+    //   `Email sent to ${values.email}. Open your email and complete registration`
+    // )
 
-    // Clear State
-    setValues({ ...values, email: '' })
+    // // save email in LS
+    // localStorage.setItem('emailForRegistration', values.email)
+
+    // // Clear State
+    // setValues({ ...values, email: '' })
   }
 
   return (
@@ -57,23 +77,10 @@ const RegisterFB = () => {
         >
           <div className='flex flex-col justify-center items-center space-y-6'>
             <Logo />
-            <h2 className='text-3xl'>Register FB</h2>
+            <h2 className='text-3xl'>Login FB</h2>
           </div>
 
           <div className='mt-6 grid gap-6'>
-            {/* {register && (
-              <FormInput
-                labelText={'name'}
-                labelHtmlFor={'name'}
-                inputId={'name'}
-                name={'name'}
-                inputType={'text'}
-                inputPlaceHolder={'Name'}
-                value={values.name}
-                handleChange={handleChange}
-              />
-            )} */}
-
             <FormInput
               labelText={'Email'}
               labelHtmlFor={'email'}
@@ -85,7 +92,7 @@ const RegisterFB = () => {
               handleChange={handleChange}
             />
 
-            {/* <FormInput
+            <FormInput
               labelText={'Password'}
               labelHtmlFor={'password'}
               inputId={'password'}
@@ -94,21 +101,26 @@ const RegisterFB = () => {
               inputPlaceHolder={'Password'}
               value={values.password}
               handleChange={handleChange}
-            /> */}
+            />
           </div>
 
           <div className='mb-6 mt-12'>
-            <button className='btnFull bg-primary text-white'>Register</button>
+            <button
+              disabled={loading}
+              className='btnFull bg-primary text-white'
+            >
+              {loading ? 'Loading... ' : 'Login'}
+            </button>
           </div>
 
           <p className='text-center'>
-            Already a member?
+            Not a member Yet?
             <button
               type='button'
-              onClick={() => navigate('/loginfb')}
+              onClick={() => navigate('/registerfb')}
               className='text-primary font-semibold ml-3'
             >
-              Login
+              Register
             </button>
           </p>
         </form>
@@ -117,4 +129,4 @@ const RegisterFB = () => {
   )
 }
 
-export default RegisterFB
+export default LoginFB

@@ -23,7 +23,7 @@ import { useAuth } from './context/auth'
 // Firebase
 import { auth as fbAuth } from './firebase'
 import TestDashboard from './pages/TestDashboard'
-
+import LoginFB from './pages/LoginFB'
 
 function App() {
   // Ctx
@@ -38,7 +38,7 @@ function App() {
 
         setAuth({
           ...auth,
-          user: { name: 'Albertano', email: user?.email || 'no hay' },
+          user: { email: user?.email || 'no hay' },
           fbToken: idTokenResult.token,
           token: 'siii ',
         })
@@ -86,6 +86,7 @@ function App() {
         <Route path='*' element={<PageNotFound />} />
         <Route path='/register' element={<Register />} />
         <Route path='/registerfb' element={<RegisterFB />} />
+        <Route path='/loginfb' element={<LoginFB />} />
         <Route path='/registerfb/complete' element={<RegisterFBComplete />} />
         <Route path='/' element={<Landing />} />
       </Routes>
