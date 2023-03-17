@@ -10,6 +10,7 @@ const PrivateRoute = () => {
 
   // State
   const [ok, setOk] = useState(null)
+  console.log("OK  >>>>" , ok)
 
   const authCheck = async () => {
     const { data } = await axios.get(`/api/auth-check`)

@@ -6,8 +6,11 @@ const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({
     user: null,
     token: '',
+    fbToken: ''
   })
 
+
+  console.log(auth)
   // Axios config
   axios.defaults.headers.common['Authorization'] = auth?.token
 
