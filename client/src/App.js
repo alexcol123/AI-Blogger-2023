@@ -24,6 +24,7 @@ import { useAuth } from './context/auth'
 import { auth as fbAuth } from './firebase'
 import TestDashboard from './pages/TestDashboard'
 import LoginFB from './pages/LoginFB'
+import ForgotPassword from './pages/ForgotPassword'
 
 function App() {
   // Ctx
@@ -88,6 +89,8 @@ function App() {
         <Route path='/registerfb' element={<RegisterFB />} />
         <Route path='/loginfb' element={<LoginFB />} />
         <Route path='/registerfb/complete' element={<RegisterFBComplete />} />
+        <Route path='/forgot/password' element={<ForgotPassword />} />
+
         <Route path='/' element={<Landing />} />
       </Routes>
     </BrowserRouter>

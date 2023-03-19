@@ -4,7 +4,7 @@ import { FcGoogle } from 'react-icons/fc'
 import FormInput from '../components/formParts/FormInput'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/auth'
 import { auth as fbAuth, googleAuthProvider } from '../firebase'
 
@@ -27,6 +27,10 @@ const LoginFB = () => {
     setValues({ ...values, [name]: value })
   }
 
+  const forgotPW = () => {
+    console.log('forgot')
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -40,7 +44,7 @@ const LoginFB = () => {
       const idTokenResult = await user.getIdTokenResult()
 
       setAuth({
-        user: user.email,
+        user: { email: user?.email },
         fbToken: idTokenResult.token,
       })
 
@@ -79,7 +83,7 @@ const LoginFB = () => {
         // To do work on my backend
 
         setAuth({
-          user: user.email,
+          user: { email: user?.email },
           fbToken: idTokenResult.token,
         })
 
@@ -87,7 +91,7 @@ const LoginFB = () => {
       })
       .catch((err) => {
         console.log(err)
-        toast.errror(err.message)
+        toast.error(err.message)
       })
   }
 
@@ -127,8 +131,19 @@ const LoginFB = () => {
             />
           </div>
 
+          {/* Forgot Password */}
+          <p className='text-end'>
+            <Link
+              to={'/forgot/password'}
+              className='text-primary text-end font-semibold ml-3'
+            >
+              Forgot Password?
+            </Link>
+          </p>
+
           <div className='mb-6 mt-12'>
             <button
+              type='submit'
               disabled={loading}
               className='btnFull bg-primary text-white '
             >

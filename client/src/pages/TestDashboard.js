@@ -12,10 +12,9 @@ const TestDashboard = () => {
 
   const { user } = auth
 
-  const fbAuth = getAuth()
+  console.log( user)
 
-  // first part of email
-  let userNameFromEmail = user?.email.split('@')[0] || ''
+  const fbAuth = getAuth()
 
   //
   const navigate = useNavigate()
@@ -41,14 +40,15 @@ const TestDashboard = () => {
   }
 
   return (
-    <div className=''>
+<div>
+  {user  &&    <div className=''>
       <div className='flex  bg-gray-200 justify-between  '>
         <h2 className='px-3'>AI Generator</h2>
         <ul className='flex  list-none  justify-center items-center space-x-5 mr-3  '>
-          {user ? (
+          {user.email ? (
             <>
               {' '}
-              <li>{userNameFromEmail}</li>
+              <li>{user?.email?.split('@')[0] || ''}</li>
               <li onClick={logout}>
                 <BiLogOutCircle
                   size={30}
@@ -70,7 +70,9 @@ const TestDashboard = () => {
         </ul>
       </div>
       <h1>Dashboard</h1>
-    </div>
+      <h4>{user?.email}</h4>
+    </div>}
+</div>
   )
 }
 

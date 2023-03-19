@@ -29,6 +29,7 @@ const FormInput = ({
         value={value}
         name={name}
         onChange={handleChange}
+        autoFocus
       />
     </div>
   )
