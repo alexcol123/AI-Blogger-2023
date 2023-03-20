@@ -5,7 +5,26 @@ import jwt from 'jsonwebtoken'
 //  Register
 export const createOrUpdateUser = async (req, res) => {
   try {
-    res.status(200).json({ msg: 'you hit the FB create user' })
+    console.log(req.user)
+
+    const { name, picture, email } = req.user
+
+    const user = await User.findOneAndUpdate(
+      { email },
+      { name, picture },
+      { new: true }
+    )
+
+    if (user) {
+      console.log('backend User updated')
+      res.json(user)
+    } else {
+      const newUser = await User.create({ name, email, picture })
+      console.log('backend New User Created')
+      res.json(newUser)
+    }
+
+    // res.status(200).json({ msg: 'you hit the FB create user' })
 
     // let { name, email, password } = req.body
 

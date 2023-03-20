@@ -14,7 +14,6 @@ const LoginFB = () => {
     password: '',
   })
 
-
   const [auth, setAuth] = useAuth()
   const { fbToken } = auth
 
@@ -29,8 +28,18 @@ const LoginFB = () => {
     setValues({ ...values, [name]: value })
   }
 
-  const forgotPW = () => {
-    console.log('forgot')
+  const createOrUpdateUser = async (authtoken) => {
+    // const { data } = await axios.post('/api/register', values)
+
+    return await axios.post(
+      '/api/create-or-update-user',
+      {},
+      {
+        headers: {
+          authtoken: authtoken,
+        },
+      }
+    )
   }
 
   const handleSubmit = async (e) => {
@@ -42,37 +51,28 @@ const LoginFB = () => {
         values.email,
         values.password
       )
+
       const { user } = result
       const idTokenResult = await user.getIdTokenResult()
 
-      setAuth({
-        user: { email: user?.email },
-        fbToken: idTokenResult.token,
-      })
+      console.log(idTokenResult)
 
-      navigate('/dashboard-test')
-      setLoading(false)
+      // Talk to our backend
+      createOrUpdateUser(idTokenResult.token)
+        .then((res) => console.log('Create or Update RES ', res))
+        .catch()
+
+      // setAuth({
+      //   user: { email: user?.email },
+      //   fbToken: idTokenResult.token,
+      // })
+
+      // navigate('/dashboard-test')
+      // setLoading(false)
     } catch (error) {
       console.log(error)
       setLoading(false)
     }
-
-    // const config = {
-    //   url: process.env.REACT_APP_REGISTER_REDIRECT_URL,
-    //   handleCodeInApp: true,
-    // }
-
-    // await fbAuth.sendSignInLinkToEmail(values.email, config)
-
-    // toast.success(
-    //   `Email sent to ${values.email}. Open your email and complete registration`
-    // )
-
-    // // save email in LS
-    // localStorage.setItem('emailForRegistration', values.email)
-
-    // // Clear State
-    // setValues({ ...values, email: '' })
   }
 
   const googleLogin = async () => {
@@ -97,11 +97,9 @@ const LoginFB = () => {
       })
   }
 
-
   useEffect(() => {
     if (fbToken) navigate('/dashboard-test')
   }, [fbToken])
-
 
   return (
     <div className='h-screen  w-screen  flex items-center  justify-center bg-blue-100  '>
