@@ -22,6 +22,22 @@ const RegisterFB = () => {
 
   const [register, setRegister] = useState(false)
 
+
+  const createOrUpdateUser = async (authtoken) => {
+    // const { data } = await axios.post('/api/register', values)
+
+    return await axios.post(
+      '/api/create-or-update-user',
+      {},
+      {
+        headers: {
+          authtoken: authtoken,
+        },
+      }
+    )
+  }
+
+
   const handleChange = (e) => {
     const name = e.target.name
     const value = e.target.value

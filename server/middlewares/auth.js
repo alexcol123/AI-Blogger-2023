@@ -40,9 +40,11 @@ export const authCheck = async (req, res, next) => {
 
     const firebaseUser = await admin.auth().verifyIdToken(req.headers.authtoken)
 
-    // console.log('Firebase user in authcheck', firebaseUser)
+     console.log('Firebase user in authcheck', firebaseUser)
 
     req.user = firebaseUser
+
+
 
     next()
 

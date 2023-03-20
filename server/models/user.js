@@ -6,7 +6,6 @@ const UserSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
-    required: true,
   },
   email: {
     type: String,
@@ -24,7 +23,6 @@ const UserSchema = new mongoose.Schema({
 
   picture: {
     type: String,
-    trim: true,
   },
 
   cart: {

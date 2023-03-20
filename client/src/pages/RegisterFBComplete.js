@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/auth'
 import { auth as fbAuth } from '../firebase'
+import { createOrUpdateUser } from '../functions/auth'
 
 const RegisterFBComplete = () => {
   const [values, setValues] = useState({
@@ -74,16 +75,32 @@ const RegisterFBComplete = () => {
         // console.log(idTokenResult.token)
         // console.log(idTokenResult.claims.email)
 
-        // Save to  Auth Context
-        setAuth({
-          ...auth,
-          user: idTokenResult.claims.email,
-          fbToken: idTokenResult.token,
-          token: ''
-        })
+        // // Save to  Auth Context
+        // setAuth({
+        //   ...auth,
+        //   user: idTokenResult.claims.email,
+        //   fbToken: idTokenResult.token,
+        //   token: ''
+        // })
+
+        // Talk to our backend
+        createOrUpdateUser(idTokenResult.token)
+          .then((res) =>
+            setAuth({
+              user: {
+                name: res.data.name,
+                picture: res.data.picture,
+                email: res.data.email,
+                role: res.data.role,
+                _id: res.data._id,
+              },
+              fbToken: idTokenResult.token,
+            })
+          )
+          .catch()
 
         // redirect
-        navigate('/')
+        navigate('/dashboard-test')
       }
     } catch (error) {
       console.log(error)

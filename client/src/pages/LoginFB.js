@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/auth'
 import { auth as fbAuth, googleAuthProvider } from '../firebase'
+import { createOrUpdateUser } from '../functions/auth'
 
 const LoginFB = () => {
   const [values, setValues] = useState({
@@ -28,19 +29,7 @@ const LoginFB = () => {
     setValues({ ...values, [name]: value })
   }
 
-  const createOrUpdateUser = async (authtoken) => {
-    // const { data } = await axios.post('/api/register', values)
 
-    return await axios.post(
-      '/api/create-or-update-user',
-      {},
-      {
-        headers: {
-          authtoken: authtoken,
-        },
-      }
-    )
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -55,20 +44,33 @@ const LoginFB = () => {
       const { user } = result
       const idTokenResult = await user.getIdTokenResult()
 
-      console.log(idTokenResult)
+
 
       // Talk to our backend
-      createOrUpdateUser(idTokenResult.token)
-        .then((res) => console.log('Create or Update RES ', res))
+       createOrUpdateUser (idTokenResult.token)
+        .then((res) =>
+          setAuth({
+            user: {
+              name: res.data.name,
+              picture: res.data.picture,
+              email: res.data.email,
+              role: res.data.role,
+              _id: res.data._id,
+            },
+            fbToken: idTokenResult.token,
+          })
+        )
         .catch()
+
+      console.log('created  frontend ---------')
 
       // setAuth({
       //   user: { email: user?.email },
       //   fbToken: idTokenResult.token,
       // })
 
-      // navigate('/dashboard-test')
-      // setLoading(false)
+      navigate('/dashboard-test')
+      setLoading(false)
     } catch (error) {
       console.log(error)
       setLoading(false)
@@ -84,10 +86,23 @@ const LoginFB = () => {
 
         // To do work on my backend
 
-        setAuth({
-          user: { email: user?.email },
-          fbToken: idTokenResult.token,
-        })
+        console.log(idTokenResult)
+
+        // Talk to our backend
+        createOrUpdateUser(idTokenResult.token)
+          .then((res) =>
+            setAuth({
+              user: {
+                name: res.data.name,
+                picture: res.data.picture,
+                email: res.data.email,
+                role: res.data.role,
+                _id: res.data._id,
+              },
+              fbToken: idTokenResult.token,
+            })
+          )
+          .catch()
 
         navigate('/dashboard-test')
       })
