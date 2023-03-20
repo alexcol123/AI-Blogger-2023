@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Logo from '../components/Logo'
 import { FcGoogle } from 'react-icons/fc'
 import FormInput from '../components/formParts/FormInput'
@@ -14,7 +14,9 @@ const LoginFB = () => {
     password: '',
   })
 
+
   const [auth, setAuth] = useAuth()
+  const { fbToken } = auth
 
   const [loading, setLoading] = useState(false)
 
@@ -94,6 +96,12 @@ const LoginFB = () => {
         toast.error(err.message)
       })
   }
+
+
+  useEffect(() => {
+    if (fbToken) navigate('/dashboard-test')
+  }, [fbToken])
+
 
   return (
     <div className='h-screen  w-screen  flex items-center  justify-center bg-blue-100  '>

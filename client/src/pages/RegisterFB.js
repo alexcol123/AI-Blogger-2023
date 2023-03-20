@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState , useEffect} from 'react'
 import Logo from '../components/Logo'
 import FormInput from '../components/formParts/FormInput'
 import axios from 'axios'
@@ -14,6 +14,9 @@ const RegisterFB = () => {
   })
 
   const [auth, setAuth] = useAuth()
+
+  const { fbToken } = auth
+
 
   const navigate = useNavigate()
 
@@ -47,6 +50,12 @@ const RegisterFB = () => {
     // Clear State
     setValues({ ...values, email: '' })
   }
+
+
+
+  useEffect(() => {
+    if (fbToken) navigate('/dashboard-test')
+  }, [fbToken])
 
   return (
     <div className='h-screen  w-screen  flex items-center  justify-center bg-blue-100  '>

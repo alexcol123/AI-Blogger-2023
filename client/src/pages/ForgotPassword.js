@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import Logo from '../components/Logo'
-import { FcGoogle } from 'react-icons/fc'
+
 import FormInput from '../components/formParts/FormInput'
-import axios from 'axios'
+
 import toast from 'react-hot-toast'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/auth'
-import { auth as fbAuth, googleAuthProvider } from '../firebase'
+import { auth as fbAuth } from '../firebase'
 
 const ForgotPassword = () => {
   const [values, setValues] = useState({
@@ -17,6 +17,8 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false)
 
   const [auth, setAuth] = useAuth()
+
+  const { fbToken } = auth
 
   const navigate = useNavigate()
 
@@ -50,6 +52,11 @@ const ForgotPassword = () => {
       })
   }
 
+
+  useEffect(() => {
+    if (fbToken) navigate('/dashboard-test')
+  }, [fbToken])
+
   return (
     <div className='h-screen  w-screen  flex items-center  justify-center bg-blue-100  '>
       <div className='w-[400px]'>
@@ -73,17 +80,6 @@ const ForgotPassword = () => {
               value={values.email}
               handleChange={handleChange}
             />
-            {/* 
-            <FormInput
-              labelText={'Password'}
-              labelHtmlFor={'password'}
-              inputId={'password'}
-              name={'password'}
-              inputType={'password'}
-              inputPlaceHolder={'Password'}
-              value={values.password}
-              handleChange={handleChange}
-            /> */}
           </div>
 
           <div className='mb-6 mt-12'>
