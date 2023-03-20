@@ -12,3 +12,6 @@
 
 # misc
 .env
+
+/config
+/firebase

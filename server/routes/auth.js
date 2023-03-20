@@ -1,11 +1,13 @@
 import express from 'express'
-import { register, login } from '../controllers/auth.js'
+import { register, login, createOrUpdateUser } from '../controllers/auth.js'
 import { requireSignin } from '../middlewares/auth.js'
 
 const router = express.Router()
 
 // Sample route response
 // router.get('/register', (req, res) =>   res.json({ data: 'Henry Stella Karol Alex' }))
+
+router.post('/create-or-update-user', createOrUpdateUser)
 
 router.post('/register', register)
 router.post('/login', login)

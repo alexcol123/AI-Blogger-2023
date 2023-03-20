@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.js'
 import blogRoutes from './routes/blog.js'
 
 import fileUpload from 'express-fileupload'
+import bodyParser from 'body-parser'
 
 const __dirname = path.resolve()
 
@@ -26,10 +27,9 @@ mongoose
 app.use(cors())
 
 app.use(express.static('./public'))
-
-
 app.use(fileUpload({ useTempFiles: true, tempFileDir: '' }))
 // app.use(fileUpload({ useTempFiles: true }))
+app.use(bodyParser.json())
 
 app.use(express.json())
 

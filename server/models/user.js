@@ -14,12 +14,21 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true,
     lowercase: true,
+    index: true,
   },
 
   password: {
     type: String,
     trim: true,
     required: true,
+  },
+
+  cart: {
+    type: Array,
+    default: [],
+  },
+  address: {
+    type: String,
   },
 
   tokensAvailable: {

@@ -432,6 +432,8 @@ export const createAiImageVariation = async (req, res) => {
           '512x512'
         )
 
+        console.log(response)
+
         return response.data.data[0].url
       } catch (error) {
         console.log(error)
