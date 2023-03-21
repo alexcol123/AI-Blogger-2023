@@ -5,31 +5,47 @@ import jwt from 'jsonwebtoken'
 //  Register
 export const createOrUpdateUser = async (req, res) => {
   try {
-    console.log('bd usaaah')
-    console.log(req.user)
+    const { name, picture, email } = req.user
 
-    // const { name, picture, email } = req.user
+    const user = await User.findOneAndUpdate(
+      { email },
+      { name: email.split('@')[0], picture },
+      { new: true }
+    )
 
-    // const user = await User.findOneAndUpdate(
-    //   { email },
-    //   { name: email.split('@')[0], picture },
-    //   { new: true }
-    // )
-
-    // if (user) {
-    //   console.log('backend User updated')
-    //   res.json(user)
-    // } else {
-    //   const newUser = await User.create({
-    //     name: email.split('@')[0],
-    //     email,
-    //     picture,
-    //   })
-    //   console.log('backend New User Created')
-    //   res.json(newUser)
-    // }
+    if (user) {
+      console.log('backend User updated')
+      res.json(user)
+    } else {
+      const newUser = await User.create({
+        name: email.split('@')[0],
+        email,
+        picture,
+      })
+      console.log('backend New User Created')
+      res.json(newUser)
+    }
   } catch (error) {
     console.log(error)
+  }
+}
+
+
+//  currentUser
+export const currentUser = async (req, res) => {
+  try {
+    const { email } = req.user
+
+     const user = await User.findOne({email} )
+
+
+    if (!user) {
+      res.json({ message: 'User Not found' })
+    } else {
+      res.json(user)
+    }
+  } catch (error) {
+    res.json(error)
   }
 }
 

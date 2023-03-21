@@ -29,8 +29,6 @@ const LoginFB = () => {
     setValues({ ...values, [name]: value })
   }
 
-
-
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -44,10 +42,8 @@ const LoginFB = () => {
       const { user } = result
       const idTokenResult = await user.getIdTokenResult()
 
-
-
       // Talk to our backend
-       createOrUpdateUser (idTokenResult.token)
+      createOrUpdateUser(idTokenResult.token)
         .then((res) =>
           setAuth({
             user: {
@@ -60,7 +56,7 @@ const LoginFB = () => {
             fbToken: idTokenResult.token,
           })
         )
-        .catch()
+        .catch((err) => console.log(err))
 
       console.log('created  frontend ---------')
 

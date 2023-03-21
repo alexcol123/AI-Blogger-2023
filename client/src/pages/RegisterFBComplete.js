@@ -97,7 +97,7 @@ const RegisterFBComplete = () => {
               fbToken: idTokenResult.token,
             })
           )
-          .catch()
+          .catch(err => console.log(err))
 
         // redirect
         navigate('/dashboard-test')

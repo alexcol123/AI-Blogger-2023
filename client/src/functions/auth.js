@@ -13,3 +13,19 @@ export const createOrUpdateUser = async (authtoken) => {
     }
   )
 }
+
+export const currentUser = async (authtoken) => {
+  // const { data } = await axios.post('/api/register', values)
+
+  return await axios.post(
+    '/api/current-user',
+    {},
+    {
+      headers: {
+        authtoken: authtoken,
+      },
+    }
+  )
+}
+
+

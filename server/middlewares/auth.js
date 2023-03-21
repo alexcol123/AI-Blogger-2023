@@ -36,25 +36,18 @@ export const requireSignin = (req, res, next) => {
 export const authCheck = async (req, res, next) => {
   try {
     //  Token sent form Front end  location
-    //  console.log(req.headers)
 
-    const firebaseUser = await admin.auth().verifyIdToken(req.headers.authtoken)
+    if (req.headers.authtoken) {
+      const firebaseUser = await admin
+        .auth()
+        .verifyIdToken(req.headers.authtoken)
 
-     console.log('Firebase user in authcheck', firebaseUser)
+      // console.log('Firebase user in authcheck', firebaseUser)
 
-    req.user = firebaseUser
+      req.user = firebaseUser
 
-
-
-    next()
-
-    // const decoded = jwt.verify(
-    //   req.headers.authorization,
-    //   process.env.JWT_SECRET
-    // )
-    // // console.log('REQ DECODED =>', decoded)
-    // req.user = decoded
-    // next()
+      next()
+    }
   } catch (err) {
     // return res.status(401).json({ err: 'Invalid or expired token' })
     console.log(err)

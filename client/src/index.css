@@ -51,7 +51,7 @@
   }
 
   li {
-    @apply my-2 ;
+    @apply my-2;
   }
 }
 
@@ -67,3 +67,4 @@
     @apply bg-white w-full py-12 px-10  border shadow-md;
   }
 }
+

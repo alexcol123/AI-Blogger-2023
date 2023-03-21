@@ -25,10 +25,14 @@ import { auth as fbAuth } from './firebase'
 import TestDashboard from './pages/TestDashboard'
 import LoginFB from './pages/LoginFB'
 import ForgotPassword from './pages/ForgotPassword'
+import { currentUser } from './functions/auth'
+import Payment from './pages/Payment'
 
 function App() {
   // Ctx
   const [auth, setAuth] = useAuth()
+
+
   // Check FB auth state
   useEffect(() => {
     const unsubscribe = fbAuth.onAuthStateChanged(async (user) => {
@@ -40,9 +44,29 @@ function App() {
         setAuth({
           ...auth,
           user: { email: user?.email || 'no hay' },
-          fbToken: idTokenResult.token,
+          fbToken: idTokenResult,
           token: 'siii ',
         })
+
+
+
+        // Talk to our backend
+        currentUser(idTokenResult.token)
+          .then((res) =>
+            // console.log(res)
+            setAuth({
+              user: {
+                name: res.data.name,
+                picture: res.data.picture,
+                email: res.data.email,
+                role: res.data.role,
+                tokensAvailable: res.data.tokensAvailable,
+                _id: res.data._id,
+              },
+              fbToken: idTokenResult.token,
+            })
+          )
+          .catch((err) => console.log(err))
       }
     })
 
@@ -90,6 +114,7 @@ function App() {
         <Route path='/loginfb' element={<LoginFB />} />
         <Route path='/registerfb/complete' element={<RegisterFBComplete />} />
         <Route path='/forgot/password' element={<ForgotPassword />} />
+        <Route path='/payment' element={<Payment />} />
 
         <Route path='/' element={<Landing />} />
       </Routes>
@@ -126,3 +151,5 @@ const oldrutes = (
     <Route path='/landing' element={<Landing />} />
   </Routes>
 )
+
+

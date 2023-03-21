@@ -7,6 +7,7 @@ import path from 'path'
 
 import authRoutes from './routes/auth.js'
 import blogRoutes from './routes/blog.js'
+import stripeRoutes from './routes/stripe.js'
 
 import fileUpload from 'express-fileupload'
 import bodyParser from 'body-parser'
@@ -43,6 +44,7 @@ app.get('/users', (req, res) => {
 // Routes
 app.use('/api', authRoutes)
 app.use('/api', blogRoutes)
+app.use('/api', stripeRoutes)
 
 const port = process.env.PORT || 8000
 

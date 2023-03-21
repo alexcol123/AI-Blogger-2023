@@ -1,5 +1,5 @@
 import express from 'express'
-import { register, login, createOrUpdateUser } from '../controllers/auth.js'
+import { register, login, createOrUpdateUser, currentUser } from '../controllers/auth.js'
 import { authCheck, requireSignin } from '../middlewares/auth.js'
 
 const router = express.Router()
@@ -8,6 +8,7 @@ const router = express.Router()
 // router.get('/register', (req, res) =>   res.json({ data: 'Henry Stella Karol Alex' }))
 
 router.post('/create-or-update-user', authCheck, createOrUpdateUser)
+router.post('/current-user', authCheck, currentUser)
 
 router.post('/register', register)
 router.post('/login', login)
