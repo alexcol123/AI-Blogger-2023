@@ -17,9 +17,10 @@ const StripeCheckout = () => {
   const [processing, setProcessing] = useState('')
   const [disabled, setDisabled] = useState(true)
   const [clientSecret, setClientSecret] = useState('')
+  const [cartTotalAmt, setCartTotalAmt] = useState('0')
 
-  console.log(clientSecret)
-  console.log(error)
+  console.log(cartTotalAmt)
+  // console.log(error)
 
   const stripe = useStripe()
   const elements = useElements()
@@ -58,11 +59,22 @@ const StripeCheckout = () => {
     setError(e.error ? e.error.message : '') // Show error message
   }
 
+  // useEffect(() => {
+  //   createPaymentIntent(fbToken.token).then((res) => {
+  //     setClientSecret(res.data.client_secret)
+  //   })
+  // }, [])
+
   useEffect(() => {
-    createPaymentIntent(fbToken.token).then((res) => {
-      setClientSecret(res.data.client_secret)
-    })
+    getSecret()
   }, [fbToken])
+
+  const getSecret = async () => {
+    const response = await createPaymentIntent(fbToken.token)
+    setClientSecret(response.data.paymentIntent.client_secret)
+    setCartTotalAmt(response.data.cartTotal)
+     console.log(response)
+  }
 
   const cartStyle = {
     style: {
@@ -83,7 +95,8 @@ const StripeCheckout = () => {
   }
 
   return (
-    <>
+    <div className='text-center'>
+  {cartTotalAmt !== 0  &&   <h4>Balance   {  cartTotalAmt.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</h4>}
       <p className={succeeded ? 'result-message' : 'result-message hidden'}>
         Payment Successul
         <Link to='/user/history'> See your purchase history </Link>
@@ -112,7 +125,7 @@ const StripeCheckout = () => {
           </div>
         )}
       </form>
-    </>
+    </div>
   )
 }
 

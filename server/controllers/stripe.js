@@ -13,11 +13,23 @@ console.log(stripe)
 //  Register
 export const createPaymentIntent = async (req, res) => {
   try {
+    let productTotal = 10
+    // Later apply coupon
+    // later calculate price
+
+    //  1 find user
+    const user = await User.findOne({ email: req.user.email })
+
+    //  2 find user cart total
+
+    //  create payment intent with order amount and currency
+
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 100,
+      amount: productTotal * 100,
       currency: 'usd',
     })
-    res.json(paymentIntent)
+    console.log(paymentIntent)
+    res.json({ paymentIntent, cartTotal: productTotal })
   } catch (error) {
     console.log(error)
   }
